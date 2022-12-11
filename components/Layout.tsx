@@ -19,6 +19,7 @@ function Layout({ children, title = 'Fractal Drawer' }: Props) {
       </Head>
       <header>
         <nav>
+          <Link className='feature-link' href={'/'}>Home</Link>
           {
             features.map((feature, _) => {
               return <Link className='feature-link' key={feature.name} href={feature ? `/${feature.id}` : '/'}>{feature.name}</Link>
