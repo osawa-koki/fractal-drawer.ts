@@ -1,7 +1,12 @@
 
+#Root {
+  margin: 3rem auto;
+}
+
 #CanvasArea {
   h1 {
     text-align: center;
+    margin: 1rem;
   }
   canvas {
     display: block;
@@ -16,4 +21,14 @@
   justify-content: center;
   align-items: center;
   margin: 1rem 0;
+}
+
+#Settings {
+  border-collapse: collapse;
+  margin: 0 auto;
+  th, td {
+    border: 1px black solid;
+    padding: 0.5rem;
+    text-align: center;
+  }
 }

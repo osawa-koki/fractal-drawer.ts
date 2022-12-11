@@ -1,5 +1,14 @@
 import React, { useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+
+const canvasMinSize = 100;
+const canvasMaxSize = 500;
+const maxIterationMinCount = 3;
+const maxIterationMaxCount = 100;
+const thresholdMin = 3;
+const thresholdMax = 100;
+const axis_delta = 0.1;
 
 const Mandelbrot = () => {
 
@@ -40,7 +49,7 @@ const Mandelbrot = () => {
             if (i === maxIterations) {
               ctx.fillStyle = 'black';
             } else {
-              ctx.fillStyle = `hsla(${i * 360 / maxIterations}, 100%, 50%, 1)`;
+              ctx.fillStyle = `hsla(${(i * 360 / maxIterations + color) % 360}, 100%, 50%, 1)`;
             }
             ctx.fillRect(x, y, 1, 1);
           }
@@ -50,7 +59,7 @@ const Mandelbrot = () => {
   }
 
   return (
-    <div>
+    <div id='Root'>
       <div id='CanvasArea'>
         <h1 onClick={() => {console.log(canvasRef.current)}}>Mandelbrot</h1>
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
@@ -58,11 +67,47 @@ const Mandelbrot = () => {
       <div id='button-div'>
         <Button variant="outline-primary" onClick={Draw}>Draw!!!</Button>
       </div>
-      <table>
+      <table id='Settings'>
         <tbody>
           <tr>
-            <th></th>
-            <td></td>
+            <th>Canvas Size</th>
+            <td><Form.Range min={canvasMinSize} max={canvasMaxSize} onInput={(e) => {setCanvasSize(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td>{canvasSize}</td>
+          </tr>
+          <tr>
+            <th>Color (start)</th>
+            <td><Form.Range min={0} max={360} value={color} onInput={(e) => {setColor(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td style={{backgroundColor: `hsl(${color}, 100%, 50%)`}}></td>
+          </tr>
+          <tr>
+            <th>Max Iterations</th>
+            <td><Form.Range min={maxIterationMinCount} max={maxIterationMaxCount} value={maxIterations} onInput={(e) => {setMaxIterations(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td>{maxIterations}</td>
+          </tr>
+          <tr>
+            <th>Threshold</th>
+            <td><Form.Range min={thresholdMin} max={thresholdMax} value={threshold} onInput={(e) => {setThreshold(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td>{threshold}</td>
+          </tr>
+          <tr>
+            <th>X Min</th>
+            <td><Form.Control type='number' step={axis_delta} value={xMin} onInput={(e) => {setXMin(parseFloat((e.target as HTMLInputElement).value))}} /></td>
+            <td>{xMin}</td>
+          </tr>
+          <tr>
+            <th>X Max</th>
+            <td><Form.Control type='number' step={axis_delta} value={xMax} onInput={(e) => {setXMax(parseFloat((e.target as HTMLInputElement).value))}} /></td>
+            <td>{xMax}</td>
+          </tr>
+          <tr>
+            <th>Y Min</th>
+            <td><Form.Control type='number' step={axis_delta} value={yMin} onInput={(e) => {setYMin(parseFloat((e.target as HTMLInputElement).value))}} /></td>
+            <td>{yMin}</td>
+          </tr>
+          <tr>
+            <th>Y Max</th>
+            <td><Form.Control type='number' step={axis_delta} value={yMax} onInput={(e) => {setYMax(parseFloat((e.target as HTMLInputElement).value))}} /></td>
+            <td>{yMax}</td>
           </tr>
         </tbody>
       </table>
