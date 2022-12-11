@@ -1,4 +1,5 @@
 import '../components/Layout.scss';
+import '../pages/global.scss';
 
 import '../pages/index.scss';
 
