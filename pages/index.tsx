@@ -17,7 +17,7 @@ const IndexPage = () => (
             return (
               <Link className='IndexFeatureLink' key={feature.name} href={feature ? `/${feature.id}` : '/'}>
                 <p>{feature.name}</p>
-                <img src={`/feature-image/${feature.id}.png`} alt={feature.name} />
+                <img src={`${Settings.RootPath}/feature-image/${feature.id}.png`} alt={feature.name} />
               </Link>
             )
           })
