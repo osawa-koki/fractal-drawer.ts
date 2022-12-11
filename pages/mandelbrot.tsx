@@ -17,38 +17,34 @@ const Mandelbrot = () => {
   function Draw() {
     let canvas = canvasRef.current;
     if (canvas) {
-      let context = canvas.getContext('2d');
-      if (context) {
-        let imageData = context.createImageData(canvasSize, canvasSize);
-        let data = imageData.data;
-        let xScale = (xMax - xMin) / canvasSize;
-        let yScale = (yMax - yMin) / canvasSize;
+      let ctx = canvas.getContext('2d');
+      if (ctx) {
+        let xRange = xMax - xMin;
+        let yRange = yMax - yMin;
+        let xStep = xRange / canvasSize;
+        let yStep = yRange / canvasSize;
         for (let x = 0; x < canvasSize; x++) {
           for (let y = 0; y < canvasSize; y++) {
-            let a = xMin + x * xScale;
-            let b = yMin + y * yScale;
-            let ca = a;
-            let cb = b;
-            let n = 0;
-            while (n < maxIterations) {
-              let aa = a * a - b * b;
-              let bb = 2 * a * b;
-              a = aa + ca;
-              b = bb + cb;
-              if (Math.abs(a + b) > threshold) {
-                break;
-              }
-              n++;
+            let x0 = xMin + x * xStep;
+            let y0 = yMin + y * yStep;
+            let x1 = 0;
+            let y1 = 0;
+            let i = 0;
+            while (x1 * x1 + y1 * y1 < threshold && i < maxIterations) {
+              let x2 = x1 * x1 - y1 * y1 + x0;
+              let y2 = 2 * x1 * y1 + y0;
+              x1 = x2;
+              y1 = y2;
+              i++;
             }
-            let bright = n / maxIterations * 255;
-            let pixel = (x + y * canvasSize) * 4;
-            data[pixel + 0] = bright;
-            data[pixel + 1] = bright;
-            data[pixel + 2] = bright;
-            data[pixel + 3] = 255;
+            if (i === maxIterations) {
+              ctx.fillStyle = 'black';
+            } else {
+              ctx.fillStyle = `hsla(${i * 360 / maxIterations}, 100%, 50%, 1)`;
+            }
+            ctx.fillRect(x, y, 1, 1);
           }
         }
-        context.putImageData(imageData, 0, 0);
       }
     }
   }
