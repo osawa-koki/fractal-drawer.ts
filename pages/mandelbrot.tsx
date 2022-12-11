@@ -2,6 +2,9 @@ import React, { useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
+import Layout from '../components/Layout';
+import Settings from '../components/Settings';
+
 const canvasMinSize = 100;
 const canvasMaxSize = 500;
 const maxIterationMinCount = 3;
@@ -59,7 +62,7 @@ const Mandelbrot = () => {
   }
 
   return (
-    <div id='Root'>
+    <Layout title={`${Settings.ProjectName}`}>
       <div id='CanvasArea'>
         <h1 onClick={() => {console.log(canvasRef.current)}}>Mandelbrot</h1>
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
@@ -111,7 +114,7 @@ const Mandelbrot = () => {
           </tr>
         </tbody>
       </table>
-    </div>
+    </Layout>
   );
 };
 
