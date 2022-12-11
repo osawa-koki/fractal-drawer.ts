@@ -7,7 +7,7 @@ import features from '../src/features';
 type Props = {
   children?: ReactNode
   title?: string
-}
+};
 
 function Layout({ children, title = 'Fractal Drawer' }: Props) {
   return (
