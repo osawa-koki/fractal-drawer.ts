@@ -1,0 +1,30 @@
+
+#CanvasArea {
+  h1 {
+    text-align: center;
+    margin: 1rem;
+  }
+  canvas {
+    display: block;
+    margin: 0 auto;
+    aspect-ratio: 1 / 1;
+    border: 1px black solid;
+  }
+}
+
+#button-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+#Settings {
+  border-collapse: collapse;
+  margin: 0 auto;
+  th, td {
+    border: 1px black solid;
+    padding: 0.5rem;
+    text-align: center;
+  }
+}
