@@ -11,13 +11,13 @@ const IndexPage = () => (
       <p>
         キレイなフラクタル図形を描写するサイトです。
       </p>
-      <div>
+      <div id='IndexFeatureDiv'>
         {
           features.map((feature, _) => {
             return (
-              <Link key={feature.name} href={feature ? `/${feature.id}` : '/'}>
+              <Link className='IndexFeatureLink' key={feature.name} href={feature ? `/${feature.id}` : '/'}>
                 <p>{feature.name}</p>
-                <img src={`/${feature.id}`} alt={feature.name} />
+                <img src={`/feature-image/${feature.id}.png`} alt={feature.name} />
               </Link>
             )
           })
