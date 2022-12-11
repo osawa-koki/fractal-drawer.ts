@@ -1,0 +1,20 @@
+
+#Root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  header {
+    nav {
+      .feature-link {
+        margin-right: 0.5rem;
+        padding-right: 0.5rem;
+        border-right: 1px solid lightgray;
+        color: rgb(0, 90, 255);
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
