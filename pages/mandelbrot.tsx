@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import Button from 'react-bootstrap/Button';
 
 const Mandelbrot = () => {
 
@@ -10,8 +11,8 @@ const Mandelbrot = () => {
   let [threshold, setThreshold] = useState(10);
   let [xMin, setXMin] = useState(-2.5);
   let [xMax, setXMax] = useState(1);
-  let [yMin, setYMin] = useState(-1);
-  let [yMax, setYMax] = useState(1);
+  let [yMin, setYMin] = useState(-1.5);
+  let [yMax, setYMax] = useState(1.5);
 
   function Draw() {
     let canvas = canvasRef.current;
@@ -58,6 +59,9 @@ const Mandelbrot = () => {
         <h1 onClick={() => {console.log(canvasRef.current)}}>Mandelbrot</h1>
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
+      <div id='button-div'>
+        <Button variant="outline-primary" onClick={Draw}>Draw!!!</Button>
+      </div>
       <table>
         <tbody>
           <tr>
@@ -66,7 +70,6 @@ const Mandelbrot = () => {
           </tr>
         </tbody>
       </table>
-      <button onClick={Draw}></button>
     </div>
   );
 };
