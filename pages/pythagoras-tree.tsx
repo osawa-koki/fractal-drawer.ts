@@ -45,8 +45,8 @@ const PythagorasTree = () => {
   const bottomSize = () => canvasSize * bottom / 100;
 
   useEffect (() => {
-    canvas = canvasRef.current;
-    ctx = canvas.getContext('2d');
+    canvas = canvasRef.current!;
+    ctx = canvas.getContext('2d')!;
     Draw(false);
   }, [canvasSize, color, size, degree, maxIterations, left, bottom]);
 
