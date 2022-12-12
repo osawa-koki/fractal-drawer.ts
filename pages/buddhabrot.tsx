@@ -25,7 +25,7 @@ const Buddhabrot = () => {
   let [xMax, setXMax] = useState(1.5);
   let [yMin, setYMin] = useState(-1.5);
   let [yMax, setYMax] = useState(1.5);
-  let [numberOfTrials, setNumberOfTrials] = useState(10000);
+  let [numberOfTrials, setNumberOfTrials] = useState(100000);
   let [lighter, setLighter] = useState(0.1);
 
   function hslToRgb(h: number, s: number, l: number) {
