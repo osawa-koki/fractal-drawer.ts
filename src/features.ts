@@ -22,8 +22,8 @@ const features: Feature[] = [
     id: "buddhabrot",
   },
   {
-    name: "トリコルン集合",
-    description: "トリコルン集合を描画します。",
+    name: "トライコーン集合",
+    description: "トライコーン集合を描画します。",
     id: "tricorn",
   },
   {
@@ -40,6 +40,11 @@ const features: Feature[] = [
     name: "ピタゴラスの木",
     description: "ピタゴラスの木を描画します。",
     id: "pythagoras-tree",
+  },
+  {
+    name: "再帰ツリー",
+    description: "再帰ツリーを描画します。",
+    id: "recursive-tree",
   },
   {
     name: "シェルピンスキーの三角形",
