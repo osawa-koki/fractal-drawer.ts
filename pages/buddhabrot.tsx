@@ -18,7 +18,6 @@ const Buddhabrot = () => {
   let canvasRef = useRef<HTMLCanvasElement>(null);
 
   let [canvasSize, setCanvasSize] = useState(300);
-  let [color, setColor] = useState(0);
   let [maxIterations, setMaxIterations] = useState(100);
   let [threshold, setThreshold] = useState(100);
   let [xMin, setXMin] = useState(-2);
@@ -42,7 +41,7 @@ const Buddhabrot = () => {
           const x = Math.random() * (xMax - xMin) + xMin;
           const y = Math.random() * (yMax - yMin) + yMin;
           let [real, imag] = new Array(2).fill(0);
-          const xys = [];
+          const xy: number[][] = [];
           let check = false;
           for (let j = 0; j < maxIterations; j++) {
             const [real2, imag2] = [real * real - imag * imag + x, 2 * real * imag + y];
@@ -52,11 +51,11 @@ const Buddhabrot = () => {
               check = true;
               break;
             }
-            xys.push([real, imag]);
+            xy.push([real, imag] as number[]);
           }
           if (check) {
-            for (let j = 0; j < xys.length; j++) {
-              const [real, imag] = xys[j];
+            for (let j = 0; j < xy.length; j++) {
+              const [real, imag] = xy[j];
               const x = Math.floor((real - xMin) / (xMax - xMin) * canvasSize);
               const y = Math.floor((imag - yMin) / (yMax - yMin) * canvasSize);
               ctx.fillRect(y, x, 1, 1);
@@ -82,11 +81,6 @@ const Buddhabrot = () => {
             <th>Canvas Size</th>
             <td><Form.Range min={canvasMinSize} max={canvasMaxSize} onInput={(e) => {setCanvasSize(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{canvasSize}</td>
-          </tr>
-          <tr>
-            <th>Color (start)</th>
-            <td><Form.Range min={0} max={360} value={color} onInput={(e) => {setColor(parseInt((e.target as HTMLInputElement).value))}} /></td>
-            <td style={{backgroundColor: `hsl(${color}, 100%, 50%)`}}></td>
           </tr>
           <tr>
             <th>Max Iterations</th>
