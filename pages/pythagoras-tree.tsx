@@ -20,6 +20,11 @@ const bottomMax = 30;
 const maxIterationMinCount = 5;
 const maxIterationMaxCount = 15;
 
+type coord = {
+  x: number;
+  y: number;
+};
+
 const PythagorasTree = () => {
 
   let canvasRef = useRef<HTMLCanvasElement>(null);
@@ -28,7 +33,7 @@ const PythagorasTree = () => {
   let [color, setColor] = useState(0);
   let [size, setSize] = useState(10);
   let [degree, setDegree] = useState(60);
-  let [maxIterations, setMaxIterations] = useState(10);
+  let [maxIterations, setMaxIterations] = useState(5);
   let [left, setLeft] = useState(50);
   let [bottom, setBottom] = useState(10);
 
@@ -43,10 +48,10 @@ const PythagorasTree = () => {
   useEffect (() => {
     canvas = canvasRef.current;
     ctx = canvas.getContext('2d');
-    Draw();
+    Draw(false);
   }, [canvasSize, color, size, degree, maxIterations, left, bottom]);
 
-  function Draw() {
+  function Draw(execute: boolean) {
     ctx.clearRect(0, 0, canvasSize, canvasSize);
     ctx.fillStyle = `hsl(${color}, 100%, 50%)`;
     ctx.fillRect(
@@ -54,6 +59,101 @@ const PythagorasTree = () => {
       canvasSize - bottomSize() - boxSize(),
       boxSize(),
       boxSize(),
+    );
+    if (execute === false) return;
+    function getLeftPoints(x: number, y: number, size: number, angle: number) {
+      return [
+        {x: x, y: y},
+        {
+          x: x + Math.cos((angle + degree) * Math.PI / 180) * size,
+          y: y - Math.sin((angle + degree) * Math.PI / 180) * size,
+        },
+        {
+          x: x + Math.cos((angle + degree + 45) * Math.PI / 180) * size * Math.sqrt(2),
+          y: y - Math.sin((angle + degree + 45) * Math.PI / 180) * size * Math.sqrt(2),
+        },
+        {
+          x: x + Math.cos((angle + degree + 90) * Math.PI / 180) * size,
+          y: y - Math.sin((angle + degree + 90) * Math.PI / 180) * size,
+        },
+      ] as coord[];
+    }
+    function getRightPoints(x: number, y: number, size: number, angle: number) {
+      return [
+        {x: x, y: y},
+        {
+          x: x + Math.cos((angle - degree) * Math.PI / 180) * size,
+          y: y - Math.sin((angle - degree) * Math.PI / 180) * size,
+        },
+        {
+          x: x + Math.cos((angle - degree - 45) * Math.PI / 180) * size * Math.sqrt(2),
+          y: y - Math.sin((angle - degree - 45) * Math.PI / 180) * size * Math.sqrt(2),
+        },
+        {
+          x: x + Math.cos((angle - degree - 90) * Math.PI / 180) * size,
+          y: y - Math.sin((angle - degree - 90) * Math.PI / 180) * size,
+        },
+      ] as coord[];
+    }
+    function recDraw(p1: coord, p2: coord, size: number, angle: number, n: number, i: number) {
+      if (n === 0) return;
+      ctx.fillStyle = `hsl(${color + i * 10}, 100%, 50%)`;
+			(() => { // 左側
+        return;
+				const smalledSize = Math.cos(degree * Math.PI / 180) * size;
+				const pointsLeft = getLeftPoints(p1.x, p1.y, smalledSize, angle);
+				ctx.beginPath();
+				ctx.moveTo(pointsLeft[0].x, pointsLeft[0].y);
+        ctx.lineTo(pointsLeft[1].x, pointsLeft[1].y);
+        ctx.lineTo(pointsLeft[2].x, pointsLeft[2].y);
+        ctx.lineTo(pointsLeft[3].x, pointsLeft[3].y);
+        console.log(pointsLeft);
+				ctx.fill();
+				setTimeout(() => {
+					recDraw(
+						{ x: pointsLeft[3].x, y: pointsLeft[3].y },
+						{ x: pointsLeft[2].x, y: pointsLeft[2].y},
+						smalledSize,
+						angle + degree,
+						n - 1,
+						i + 1,
+					);
+				}, 300);
+			})();
+			(() => { // 右側
+				const smalledSize = Math.sin(degree * Math.PI / 180) * size;
+				const pointsRight = getRightPoints(p2.x, p2.y, smalledSize, angle);
+				ctx.beginPath();
+				ctx.moveTo(pointsRight[0].x, pointsRight[0].y);
+        ctx.lineTo(pointsRight[1].x, pointsRight[1].y);
+        ctx.lineTo(pointsRight[2].x, pointsRight[2].y);
+        ctx.lineTo(pointsRight[3].x, pointsRight[3].y);
+				ctx.fill();
+				setTimeout(() => {
+					recDraw(
+						{ x: pointsRight[2].x, y: pointsRight[2].y},
+						{ x: pointsRight[1].x, y: pointsRight[1].y},
+						smalledSize,
+						angle - (90 - degree),
+						n - 1,
+						i + 1,
+					);
+				}, 300);
+			})();
+    }
+    recDraw(
+      {
+        x: leftSize() - boxSize() / 2,
+        y: canvasSize - bottomSize() - boxSize(),
+      },
+      {
+        x: leftSize() - boxSize() / 2,
+        y: canvasSize - bottomSize() - boxSize(),
+      },
+      boxSize(),
+      0,
+      maxIterations - 1,
+      1,
     );
   }
 
@@ -64,7 +164,7 @@ const PythagorasTree = () => {
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
-        <Button variant="outline-primary" onClick={Draw}>Draw!!!</Button>
+        <Button variant="outline-primary" onClick={() => {Draw(true)}}>Draw!!!</Button>
       </div>
       <table id='Settings'>
         <tbody>
@@ -84,6 +184,11 @@ const PythagorasTree = () => {
             <td>{size}%</td>
           </tr>
           <tr>
+            <th>Angle</th>
+            <td><Form.Range min={degreeMin} max={degreeMax} onInput={(e) => {setDegree(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td>{degree}°</td>
+          </tr>
+          <tr>
             <th>Left</th>
             <td><Form.Range min={leftMin} max={leftMax} onInput={(e) => {setLeft(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{left}%</td>
@@ -95,7 +200,7 @@ const PythagorasTree = () => {
           </tr>
           <tr>
             <th>Max Iterations</th>
-            <td><Form.Range min={maxIterationMinCount} max={maxIterationMaxCount} onInput={(e) => {setMaxIterations(parseInt((e.target as HTMLInputElement).value)); Draw()}} /></td>
+            <td><Form.Range min={maxIterationMinCount} max={maxIterationMaxCount} onInput={(e) => {setMaxIterations(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{maxIterations}</td>
           </tr>
         </tbody>
