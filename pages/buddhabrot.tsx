@@ -30,7 +30,6 @@ const Buddhabrot = () => {
   let [numberOfTrials, setNumberOfTrials] = useState(1000000);
   let [lighter, setLighter] = useState(0.01);
 
-  // Buddhabrot
   function Draw() {
     if (canvasRef.current) {
       let canvas = canvasRef.current;
