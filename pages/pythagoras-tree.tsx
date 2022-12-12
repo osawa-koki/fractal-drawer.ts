@@ -19,6 +19,8 @@ const bottomMin = 0;
 const bottomMax = 30;
 const maxIterationMinCount = 5;
 const maxIterationMaxCount = 15;
+const timespanMin = 100;
+const timespanMax = 1000;
 
 type coord = {
   x: number;
@@ -36,6 +38,7 @@ const PythagorasTree = () => {
   let [maxIterations, setMaxIterations] = useState(10);
   let [left, setLeft] = useState(35);
   let [bottom, setBottom] = useState(15);
+  let [timespan, setTimespan] = useState(300);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -114,7 +117,7 @@ const PythagorasTree = () => {
 						n - 1,
 						i + 1,
 					);
-				}, 300);
+				}, timespan);
 			})();
 			(() => { // 右側
 				const smalledSize = Math.sin(degree * Math.PI / 180) * size;
@@ -134,7 +137,7 @@ const PythagorasTree = () => {
 						n - 1,
 						i + 1,
 					);
-				}, 300);
+				}, timespan);
 			})();
     }
     recDraw(
@@ -198,6 +201,11 @@ const PythagorasTree = () => {
             <th>Max Iterations</th>
             <td><Form.Range min={maxIterationMinCount} max={maxIterationMaxCount} onInput={(e) => {setMaxIterations(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{maxIterations}</td>
+          </tr>
+          <tr>
+            <th>Timespan</th>
+            <td><Form.Range min={timespanMin} max={timespanMax} onInput={(e) => {setTimespan(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td>{timespan}ms</td>
           </tr>
         </tbody>
       </table>
