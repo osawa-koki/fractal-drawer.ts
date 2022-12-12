@@ -25,7 +25,6 @@ const RecursiveTree = () => {
   let canvasRef = useRef<HTMLCanvasElement>(null);
 
   let [canvasSize, setCanvasSize] = useState(300);
-  let [color, setColor] = useState(0);
   let [shrink, setShrink] = useState(68);
   let [length, setLength] = useState(30);
   let [angle, setAngle] = useState(30);
@@ -108,11 +107,6 @@ const RecursiveTree = () => {
             <th>Canvas Size</th>
             <td><Form.Range min={canvasMinSize} max={canvasMaxSize} onInput={(e) => {setCanvasSize(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{canvasSize}</td>
-          </tr>
-          <tr>
-            <th>Color</th>
-            <td><Form.Range min={0} max={360} onInput={(e) => {setColor(parseInt((e.target as HTMLInputElement).value))}} /></td>
-            <td style={{backgroundColor: `hsl(${color}, 100%, 50%)`}}></td>
           </tr>
           <tr>
             <th>Length</th>
