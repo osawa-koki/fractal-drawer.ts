@@ -5,6 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Layout from '../components/Layout';
 import Settings from '../components/Settings';
 
+const pageName = 'Buddhabrot';
+
 const canvasMinSize = 100;
 const canvasMaxSize = 500;
 const maxIterationMinCount = 50;
@@ -67,9 +69,9 @@ const Buddhabrot = () => {
   }
 
   return (
-    <Layout title={`${Settings.ProjectName}`}>
+    <Layout title={`${pageName} (${Settings.ProjectName})`}>
       <div id='CanvasArea'>
-        <h1 onClick={() => {console.log(canvasRef.current)}}>Buddhabrot</h1>
+        <h1>{pageName}</h1>
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
