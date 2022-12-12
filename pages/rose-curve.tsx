@@ -30,6 +30,8 @@ const RoseCurve = () => {
   let [size, setSize] = useState(90);
   let [step, setStep] = useState(0.1);
   let [timespan, setTimespan] = useState(3);
+  let [timeEffect, setTimeEffect] = useState(true);
+  let [immidiateEffect, setImmidiateEffect] = useState(false);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -37,8 +39,8 @@ const RoseCurve = () => {
   useEffect (() => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
-    // Draw();
-  }, [canvasSize, n, k, size, step, timespan]);
+    if (immidiateEffect) Draw();
+  }, [canvasSize, n, k, size, step, timespan, timeEffect, immidiateEffect]);
 
   async function Draw() {
     ctx.clearRect(0, 0, canvasSize, canvasSize);
@@ -51,7 +53,7 @@ const RoseCurve = () => {
       ctx.fillStyle = `hsl(${color}, 100%, 50%)`;
       color = (color + 1) % 360;
       ctx.fillRect(x * zoom + canvasSize / 2, y * zoom + canvasSize / 2, 1, 1);
-      await new Promise(resolve => setTimeout(resolve, timespan));
+      if (timeEffect) await new Promise(resolve => setTimeout(resolve, timespan));
     }
   }
 
@@ -95,6 +97,16 @@ const RoseCurve = () => {
             <th>Timespan</th>
             <td><Form.Range min={timespanMin} max={timespanMax} step={10} onInput={(e) => {setTimespan(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{timespan}ms</td>
+          </tr>
+          <tr>
+            <th>Time Effect</th>
+            <td><Form.Check type='checkbox' checked={timeEffect} onChange={(e) => {setTimeEffect((e.target as HTMLInputElement).checked)}} /></td>
+            <td>{timeEffect ? 'On' : 'Off'}</td>
+          </tr>
+          <tr>
+            <th>Immidiate Effect</th>
+            <td><Form.Check type='checkbox' checked={immidiateEffect} onChange={(e) => {setImmidiateEffect((e.target as HTMLInputElement).checked); if (!immidiateEffect) setTimeEffect(false); Draw();}} /></td>
+            <td>{immidiateEffect ? 'On' : 'Off'}</td>
           </tr>
         </tbody>
       </table>
