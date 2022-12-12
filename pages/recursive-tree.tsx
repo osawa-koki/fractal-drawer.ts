@@ -53,7 +53,7 @@ const RecursiveTree = () => {
       const len = (shrink / 100) ** n * canvasSize * length / 100;
       const moved: moved_coordinate[] = [];
       { // 右側
-        const ang = (deg - angle) % 360;
+        const ang = (360 + deg - angle) % 360;
         const moved_x = x + Math.cos(ang * Math.PI / 180) * len;
         const moved_y = (ang !== 90 && ang !== 270) ? y + Math.tan(ang * Math.PI / 180) * (x - moved_x)
           : (ang === 90) ? y - len
