@@ -42,14 +42,14 @@ const features: Feature[] = [
     id: "pythagoras-tree",
   },
   {
-    name: "シェルピンスキーの三角形",
-    description: "シェルピンスキーの三角形を描画します。",
-    id: "sierpinski-triangle",
-  },
-  {
     name: "再帰ツリー",
     description: "再帰ツリーを描画します。",
     id: "recursive-tree",
+  },
+  {
+    name: "シェルピンスキーの三角形",
+    description: "シェルピンスキーの三角形を描画します。",
+    id: "sierpinski-triangle",
   },
   {
     name: "シェルピンスキーのカーペット",
