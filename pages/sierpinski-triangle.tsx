@@ -11,7 +11,7 @@ const canvasMinSize = 100;
 const canvasMaxSize = 500;
 const sizeMin = 50;
 const sizeMax = 100;
-const maxIterationMinCount = 5;
+const maxIterationMinCount = 3;
 const maxIterationMaxCount = 15;
 const timespanMin = 100;
 const timespanMax = 1000;
@@ -23,7 +23,7 @@ const SierpinskiTriangle = () => {
   let [canvasSize, setCanvasSize] = useState(300);
   let [color, setColor] = useState(0);
   let [triagleSize, setTriangleSize] = useState(70);
-  let [maxIterations, setMaxIterations] = useState(3);
+  let [maxIterations, setMaxIterations] = useState(5);
   let [timespan, setTimespan] = useState(300);
 
   let canvas: HTMLCanvasElement;
