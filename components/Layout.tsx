@@ -8,16 +8,17 @@ import features from '../src/features';
 type Props = {
   children?: ReactNode
   title?: string
+  favicon?: string
 };
 
-function Layout({ children, title = 'Fractal Drawer' }: Props) {
+function Layout({ children, title = 'Fractal Drawer', favicon = 'favicon.ico' }: Props) {
   return (
     <div id='Root'>
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <link rel="shortcut icon" href={`${Settings.RootPath}/favicon.ico`} type="image/x-icon" />
+        <link rel="shortcut icon" href={`${Settings.RootPath}/${favicon}`} type="image/x-icon" />
       </Head>
       <header>
         <nav>
