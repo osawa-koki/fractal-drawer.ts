@@ -57,6 +57,11 @@ const features: Feature[] = [
     id: "sierpinski-carpet",
   },
   {
+    name: "バラ曲線",
+    description: "バラ曲線を描画します。",
+    id: "rose-curve",
+  },
+  {
     name: "コッホ曲線",
     description: "コッホ曲線を描画します。",
     id: "koch-curve",
