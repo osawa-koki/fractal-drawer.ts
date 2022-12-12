@@ -30,8 +30,8 @@ const RoseCurve = () => {
   let [size, setSize] = useState(90);
   let [step, setStep] = useState(0.1);
   let [timespan, setTimespan] = useState(3);
-  let [timeEffect, setTimeEffect] = useState(true);
-  let [immidiateEffect, setImmidiateEffect] = useState(false);
+  let [timeEffect, setTimeEffect] = useState(false);
+  let [immidiateEffect, setImmidiateEffect] = useState(true);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
