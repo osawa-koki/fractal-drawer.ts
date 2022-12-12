@@ -154,7 +154,7 @@ const PythagorasTree = () => {
   }
 
   return (
-    <Layout title={`${pageName} (${Settings.ProjectName})`}>
+    <Layout title={`${pageName} (${Settings.ProjectName})`} favicon='feature-image/pythagoras-tree.png'>
       <div id='CanvasArea'>
         <h1>{pageName}</h1>
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
