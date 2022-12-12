@@ -20,13 +20,14 @@ const Buddhabrot = () => {
   let canvasRef = useRef<HTMLCanvasElement>(null);
 
   let [canvasSize, setCanvasSize] = useState(300);
+  let [color, setColor] = useState(0);
   let [maxIterations, setMaxIterations] = useState(100);
   let [threshold, setThreshold] = useState(100);
   let [xMin, setXMin] = useState(-2);
   let [xMax, setXMax] = useState(1);
   let [yMin, setYMin] = useState(-1.5);
   let [yMax, setYMax] = useState(1.5);
-  let [numberOfTrials, setNumberOfTrials] = useState(500000);
+  let [numberOfTrials, setNumberOfTrials] = useState(1000000);
   let [lighter, setLighter] = useState(0.01);
 
   // Buddhabrot
@@ -38,7 +39,7 @@ const Buddhabrot = () => {
         ctx.clearRect(0, 0, canvasSize, canvasSize);
         ctx.fillStyle = `black`;
         ctx.fillRect(0, 0, canvasSize, canvasSize);
-        ctx.fillStyle = `rgba(255, 255, 255, ${lighter})`;
+        ctx.fillStyle = `hsla(${color}, 100%, 50%, ${lighter})`;
         for (let i = 0; i < numberOfTrials; i++) {
           const x = Math.random() * (xMax - xMin) + xMin;
           const y = Math.random() * (yMax - yMin) + yMin;
@@ -83,6 +84,11 @@ const Buddhabrot = () => {
             <th>Canvas Size</th>
             <td><Form.Range min={canvasMinSize} max={canvasMaxSize} onInput={(e) => {setCanvasSize(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{canvasSize}</td>
+          </tr>
+          <tr>
+            <th>Color (start)</th>
+            <td><Form.Range min={0} max={360} value={color} onInput={(e) => {setColor(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td style={{backgroundColor: `hsl(${color}, 100%, 50%)`}}></td>
           </tr>
           <tr>
             <th>Max Iterations</th>
