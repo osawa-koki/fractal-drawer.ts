@@ -7,10 +7,10 @@ import Settings from '../components/Settings';
 
 const canvasMinSize = 100;
 const canvasMaxSize = 500;
-const maxIterationMinCount = 3;
-const maxIterationMaxCount = 100;
-const thresholdMin = 3;
-const thresholdMax = 100;
+const maxIterationMinCount = 50;
+const maxIterationMaxCount = 150;
+const thresholdMin = 50;
+const thresholdMax = 150;
 const axis_delta = 0.1;
 
 const Buddhabrot = () => {
@@ -19,14 +19,14 @@ const Buddhabrot = () => {
 
   let [canvasSize, setCanvasSize] = useState(300);
   let [color, setColor] = useState(0);
-  let [maxIterations, setMaxIterations] = useState(20);
-  let [threshold, setThreshold] = useState(10);
-  let [xMin, setXMin] = useState(-1.5);
-  let [xMax, setXMax] = useState(1.5);
+  let [maxIterations, setMaxIterations] = useState(100);
+  let [threshold, setThreshold] = useState(100);
+  let [xMin, setXMin] = useState(-2);
+  let [xMax, setXMax] = useState(1);
   let [yMin, setYMin] = useState(-1.5);
   let [yMax, setYMax] = useState(1.5);
-  let [numberOfTrials, setNumberOfTrials] = useState(100000);
-  let [lighter, setLighter] = useState(0.1);
+  let [numberOfTrials, setNumberOfTrials] = useState(500000);
+  let [lighter, setLighter] = useState(0.01);
 
   // Buddhabrot
   function Draw() {
@@ -102,6 +102,11 @@ const Buddhabrot = () => {
             <th>Number of Trials</th>
             <td><Form.Control type='number' value={numberOfTrials} onInput={(e) => {setNumberOfTrials(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{numberOfTrials}</td>
+          </tr>
+          <tr>
+            <th>Lighter</th>
+            <td><Form.Control type='number' step={0.01} value={lighter} onInput={(e) => {setLighter(parseFloat((e.target as HTMLInputElement).value))}} /></td>
+            <td>{lighter}</td>
           </tr>
           <tr>
             <th>X Min</th>
