@@ -9,6 +9,16 @@ const pageName = 'Pythagoras Tree';
 
 const canvasMinSize = 100;
 const canvasMaxSize = 500;
+const sizeMin = 5;
+const sizeMax = 20;
+const degreeMin = 0;
+const degreeMax = 90;
+const leftMin = 20;
+const leftMax = 80;
+const bottomMin = 0;
+const bottomMax = 30;
+const maxIterationMinCount = 5;
+const maxIterationMaxCount = 15;
 
 const PythagorasTree = () => {
 
@@ -34,7 +44,7 @@ const PythagorasTree = () => {
     canvas = canvasRef.current;
     ctx = canvas.getContext('2d');
     Draw();
-  }, [canvasSize, color, size, degree, maxIterations]);
+  }, [canvasSize, color, size, degree, maxIterations, left, bottom]);
 
   function Draw() {
     ctx.clearRect(0, 0, canvasSize, canvasSize);
@@ -70,8 +80,23 @@ const PythagorasTree = () => {
           </tr>
           <tr>
             <th>Size</th>
-            <td><Form.Range min={5} max={20} onInput={(e) => {setSize(parseInt((e.target as HTMLInputElement).value)); Draw()}} /></td>
+            <td><Form.Range min={sizeMin} max={sizeMax} onInput={(e) => {setSize(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{size}%</td>
+          </tr>
+          <tr>
+            <th>Left</th>
+            <td><Form.Range min={leftMin} max={leftMax} onInput={(e) => {setLeft(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td>{left}%</td>
+          </tr>
+          <tr>
+            <th>Bottom</th>
+            <td><Form.Range min={bottomMin} max={bottomMax} onInput={(e) => {setBottom(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td>{bottom}%</td>
+          </tr>
+          <tr>
+            <th>Max Iterations</th>
+            <td><Form.Range min={maxIterationMinCount} max={maxIterationMaxCount} onInput={(e) => {setMaxIterations(parseInt((e.target as HTMLInputElement).value)); Draw()}} /></td>
+            <td>{maxIterations}</td>
           </tr>
         </tbody>
       </table>
