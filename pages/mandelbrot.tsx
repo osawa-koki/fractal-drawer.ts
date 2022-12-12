@@ -66,7 +66,7 @@ const Mandelbrot = () => {
   return (
     <Layout title={`${pageName} (${Settings.ProjectName})`}>
       <div id='CanvasArea'>
-        <h1 onClick={() => {console.log(canvasRef.current)}}>{pageName}</h1>
+        <h1>{pageName}</h1>
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
