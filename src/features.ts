@@ -47,6 +47,11 @@ const features: Feature[] = [
     id: "sierpinski-triangle",
   },
   {
+    name: "再帰ツリー",
+    description: "再帰ツリーを描画します。",
+    id: "recursive-tree",
+  },
+  {
     name: "シェルピンスキーのカーペット",
     description: "シェルピンスキーのカーペットを描画します。",
     id: "sierpinski-carpet",
