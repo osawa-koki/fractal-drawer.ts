@@ -20,6 +20,12 @@ const maxIterationMaxCount = 15;
 const timespanMin = 100;
 const timespanMax = 1000;
 
+type moved_coordinate = {
+  x: number;
+  y: number;
+  deg: number;
+};
+
 const RecursiveTree = () => {
 
   let canvasRef = useRef<HTMLCanvasElement>(null);
@@ -45,36 +51,33 @@ const RecursiveTree = () => {
     function RecDraw(x: number, y: number, deg: number, n: number) {
       if (maxIterations < n) return;
       const len = (shrink / 100) ** n * canvasSize * length / 100;
-      (function() { // 右側
+      const moved: moved_coordinate[] = [];
+      { // 右側
         const ang = (deg - angle) % 360;
         const moved_x = x + Math.cos(ang * Math.PI / 180) * len;
         const moved_y = (ang !== 90 && ang !== 270) ? y + Math.tan(ang * Math.PI / 180) * (x - moved_x)
           : (ang === 90) ? y - len
           : y + len; // tag90とtan270はダメ!!
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(moved_x, moved_y);
-        ctx.closePath();
-        ctx.stroke();
-        setTimeout(() => {
-          RecDraw(moved_x, moved_y, ang, n + 1);
-        }, timespan);
-      })();
-      (function() { // 左側
+        moved.push({x: moved_x, y: moved_y, deg: ang});
+      }
+      { // 左側
         const ang = (deg + angle) % 360;
         const moved_x = x + Math.cos(ang * Math.PI / 180) * len;
         const moved_y = (ang !== 90 && ang !== 270) ? y + Math.tan(ang * Math.PI / 180) * (x - moved_x)
           : (ang === 90) ? y - len
           : y + len; // tag90とtan270はダメ!!
+        moved.push({x: moved_x, y: moved_y, deg: ang});
+      }
+      moved.forEach((m) => {
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(moved_x, moved_y);
+        ctx.lineTo(m.x, m.y);
         ctx.closePath();
         ctx.stroke();
         setTimeout(() => {
-          RecDraw(moved_x, moved_y, ang, n + 1);
+          RecDraw(m.x, m.y, m.deg, n + 1);
         }, timespan);
-      })();
+      });
     }
     ctx.clearRect(0, 0, canvasSize, canvasSize);
     ctx.strokeStyle = "green";
