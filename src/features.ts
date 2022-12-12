@@ -22,8 +22,8 @@ const features: Feature[] = [
     id: "buddhabrot",
   },
   {
-    name: "トリコルン集合",
-    description: "トリコルン集合を描画します。",
+    name: "トライコーン集合",
+    description: "トライコーン集合を描画します。",
     id: "tricorn",
   },
   {
