@@ -55,17 +55,21 @@ const RecursiveTree = () => {
       { // 右側
         const ang = (360 + deg - angle) % 360;
         const moved_x = x + Math.cos(ang * Math.PI / 180) * len;
-        const moved_y = (ang !== 90 && ang !== 270) ? y + Math.tan(ang * Math.PI / 180) * (x - moved_x)
-          : (ang === 90) ? y - len
-          : y + len; // tag90とtan270はダメ!!
+        const moved_y = (ang === 90)
+          ? y - len // tag90はダメ!!
+          : (ang === 270)
+          ? y + len // tan270はダメ!!
+          : y + Math.tan(ang * Math.PI / 180) * (x - moved_x);
         moved.push({x: moved_x, y: moved_y, deg: ang});
       }
       { // 左側
         const ang = (deg + angle) % 360;
         const moved_x = x + Math.cos(ang * Math.PI / 180) * len;
-        const moved_y = (ang !== 90 && ang !== 270) ? y + Math.tan(ang * Math.PI / 180) * (x - moved_x)
-          : (ang === 90) ? y - len
-          : y + len; // tag90とtan270はダメ!!
+        const moved_y = (ang === 90)
+          ? y - len // tag90はダメ!!
+          : (ang === 270)
+          ? y + len // tan270はダメ!!
+          : y + Math.tan(ang * Math.PI / 180) * (x - moved_x);
         moved.push({x: moved_x, y: moved_y, deg: ang});
       }
       moved.forEach((m) => {
