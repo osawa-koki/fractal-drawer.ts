@@ -38,7 +38,7 @@ const RecursiveTree = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     Draw(false);
-  }, [canvasSize, color, shrink, length, angle, maxIterations, timespan]);
+  }, [canvasSize, shrink, length, angle, maxIterations, timespan]);
 
   function Draw(execute: boolean = true) {
     ctx.clearRect(0, 0, canvasSize, canvasSize);
