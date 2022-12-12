@@ -105,7 +105,7 @@ const RoseCurve = () => {
           </tr>
           <tr>
             <th>Immidiate Effect</th>
-            <td><Form.Check type='checkbox' checked={immidiateEffect} onChange={(e) => {setImmidiateEffect((e.target as HTMLInputElement).checked); if (immidiateEffect === false) setTimeEffect(false); Draw();}} /></td>
+            <td><Form.Check type='checkbox' checked={immidiateEffect} onChange={(e) => {setImmidiateEffect((e.target as HTMLInputElement).checked); if ((e.target as HTMLInputElement).checked) setTimeEffect(false); Draw();}} /></td>
             <td>{immidiateEffect ? 'On' : 'Off'}</td>
           </tr>
         </tbody>
