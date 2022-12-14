@@ -30,6 +30,7 @@ const SierpinskiCarpet = () => {
   let [carpetSize, setCarpetSize] = useState(70);
   let [maxIterations, setMaxIterations] = useState(5);
   let [timespan, setTimespan] = useState(300);
+  let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -41,6 +42,8 @@ const SierpinskiCarpet = () => {
   }, [canvasSize, color, carpetSize, maxIterations, timespan]);
 
   function Draw(execute: boolean = true) {
+    if (locked) return;
+    setLocked(true);
     const cross_join = (arg: number[]): coord[] => {
       const answer: coord[] = [];
       arg.forEach(x => {
@@ -52,6 +55,7 @@ const SierpinskiCarpet = () => {
     }
     function recFx(x: number, y: number, size: number, n: number) {
       if (maxIterations < n) {
+        setLocked(false);
         return;
       }
       if (n / 2 === 0) {
