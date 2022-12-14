@@ -53,7 +53,7 @@ const Julia = () => {
               i++;
             }
             if (i == maxIterations) {
-              ctx.fillStyle = '#000000';
+              ctx.fillStyle = 'black';
             } else {
               ctx.fillStyle = `hsl(${color + i * 360 / maxIterations}, 100%, 50%)`;
             }
