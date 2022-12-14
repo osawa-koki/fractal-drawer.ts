@@ -39,7 +39,7 @@ const SierpinskiCarpet = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     Draw(false);
-  }, [canvasSize, color, carpetSize, maxIterations, timespan]);
+  }, [canvasSize, color, carpetSize, maxIterations, timespan, locked]);
 
   function Draw(execute: boolean = true) {
     if (locked) return;
