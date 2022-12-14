@@ -28,8 +28,11 @@ const Julia = () => {
   let [xMax, setXMax] = useState(1.5);
   let [yMin, setYMin] = useState(-1.5);
   let [yMax, setYMax] = useState(1.5);
+  let [locked,  setLocked] = useState(false);
 
   function Draw() {
+    if (locked) return;
+    setLocked(true);
     let canvas = canvasRef.current;
     if (canvas) {
       let ctx = canvas.getContext('2d');
@@ -59,6 +62,7 @@ const Julia = () => {
         }
       }
     }
+    setLocked(false);
   }
 
   return (
