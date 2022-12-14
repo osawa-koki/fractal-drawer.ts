@@ -39,6 +39,7 @@ const PythagorasTree = () => {
   let [left, setLeft] = useState(35);
   let [bottom, setBottom] = useState(15);
   let [timespan, setTimespan] = useState(300);
+  let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -54,6 +55,8 @@ const PythagorasTree = () => {
   }, [canvasSize, color, size, degree, maxIterations, left, bottom]);
 
   function Draw(execute: boolean) {
+    if (locked) return;
+    setLocked(true);
     ctx.clearRect(0, 0, canvasSize, canvasSize);
     ctx.fillStyle = `hsl(${color}, 100%, 50%)`;
     ctx.fillRect(
@@ -97,7 +100,10 @@ const PythagorasTree = () => {
       ] as coord[];
     }
     function recDraw(p1: coord, p2: coord, size: number, angle: number, n: number, i: number) {
-      if (n === 0) return;
+      if (n === 0) {
+        setLocked(false);
+        return;
+      }
       ctx.fillStyle = `hsl(${(320 / (maxIterations + 1) * i + color) % 360}, 100%, 50%)`;
 			(() => { // 左側
 				const smalledSize = Math.cos(degree * Math.PI / 180) * size;
