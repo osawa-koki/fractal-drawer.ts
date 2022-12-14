@@ -25,6 +25,7 @@ const SierpinskiTriangle = () => {
   let [triagleSize, setTriangleSize] = useState(70);
   let [maxIterations, setMaxIterations] = useState(5);
   let [timespan, setTimespan] = useState(300);
+  let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -33,9 +34,11 @@ const SierpinskiTriangle = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     Draw(false);
-  }, [canvasSize, color, triagleSize, maxIterations, timespan]);
+  }, [canvasSize, color, triagleSize, maxIterations, timespan, locked]);
 
   function Draw(execute: boolean = true) {
+    if (locked) return;
+    setLocked(true);
     const DrawTriangle = (x: number, y: number, size: number) => {
       const p1_x = x + size / 2; // 中央下
       const p1_y = y - Math.sin(-60 * Math.PI / 180) * size;
@@ -49,6 +52,7 @@ const SierpinskiTriangle = () => {
     }
     function recFx(x: number, y: number, size: number, n: number) {
       if (maxIterations < n) {
+        setLocked(false); // setTimeout関数は非同期で処理されるため、ここで実行完了を検知する。
         return;
       }
       if (n / 2 === 0) {
@@ -105,9 +109,7 @@ const SierpinskiTriangle = () => {
     ctx.lineTo(p2_x, p2_y);
     ctx.lineTo(p1_x + size / 2, p1_y);
     ctx.fill();
-    setTimeout(() => {
-      recFx(canvasSize / 2, start, size, 1);
-    }, timespan);
+    recFx(canvasSize / 2, start, size, 1);
   }
 
   return (
