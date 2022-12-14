@@ -32,7 +32,7 @@ const Buddhabrot = () => {
   let [locked,  setLocked] = useState(false);
 
   function Draw() {
-    if (lcoked) return;
+    if (locked) return;
     setLocked(true);
     if (canvasRef.current) {
       let canvas = canvasRef.current;
