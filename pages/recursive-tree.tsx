@@ -36,6 +36,7 @@ const RecursiveTree = () => {
   let [angle, setAngle] = useState(30);
   let [maxIterations, setMaxIterations] = useState(7);
   let [timespan, setTimespan] = useState(300);
+  let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -44,12 +45,17 @@ const RecursiveTree = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     Draw(false);
-  }, [canvasSize, shrink, length, angle, maxIterations, timespan]);
+  }, [canvasSize, shrink, length, angle, maxIterations, timespan, locked]);
 
   function Draw(execute: boolean = true) {
+    if (locked) return;
+    setLocked(true);
     ctx.clearRect(0, 0, canvasSize, canvasSize);
     function RecDraw(x: number, y: number, deg: number, n: number) {
-      if (maxIterations < n) return;
+      if (maxIterations < n) {
+        setLocked(false);
+        return;
+      }
       const len = (shrink / 100) ** n * canvasSize * length / 100;
       const moved: moved_coordinate[] = [];
       { // 右側
