@@ -16,6 +16,13 @@ const maxIterationMaxCount = 15;
 const timespanMin = 100;
 const timespanMax = 1000;
 
+type coord = {
+  x: number;
+  y: number;
+};
+
+const divition = 3;
+
 const KochCurve = () => {
 
   let canvasRef = useRef<HTMLCanvasElement>(null);
@@ -36,32 +43,36 @@ const KochCurve = () => {
   }, [canvasSize, color, triagleSize, maxIterations, timespan]);
 
   function Draw(execute: boolean = true) {
-    // import numpy as np
-    // import math
-    // import matplotlib.pyplot as plt
-    
     // th = math.pi * 60 / 180   # 正三角形の角度をラジアン化
     // a = (0.0, 0.0)
     // b = (100.0, 0.0)
     // n = 5  # 繰り返し数
     // points = [a]  # 各点の座標を入れておくリスト(最終的にこれをプロット)
     
-    
-    // def koch(a, b, n):
-    //     if n == 0:
-    //         return
-    //     s = (a[0] + (b[0] - a[0]) / 3, a[1] + (b[1] - a[1]) / 3)
-    //     t = (a[0] + (b[0] - a[0]) * 2 / 3, a[1] + (b[1] - a[1]) * 2 / 3)
-    //     u = (s[0] + (t[0] - s[0]) * math.cos(th) - (t[1] - s[1]) * math.sin(th),
-    //          s[1] + (t[0] - s[0]) * math.sin(th) + (t[1] - s[1]) * math.cos(th))
-    //     koch(a, s, n - 1)
-    //     points.append(s)
-    //     koch(s, u, n - 1)
-    //     points.append(u)
-    //     koch(u, t, n - 1)
-    //     points.append(t)
-    //     koch(t, b, n - 1)
-    
+    const th = Math.PI * 60 / 180;
+    const a: coord = {x: 0, y: 20};
+    const b: coord = {x: canvasSize, y: 0};
+    const points = [];
+      
+    function koch(a: coord, b: coord, n: number) {
+      if (n === 0) return;
+      const s: coord = {x: (a.x + b.x - a.x) / divition, y: (b.y - a.y) / divition};
+      const t: coord = {x: (a.x + b.x - a.x) * 2 / divition, y: a.y + b.y - a.y * 2 / divition};
+      const u: coord = {
+        x: s.x + (t.x - s.x) * Math.cos(th) - (t.y, s.y) * Math.sin(th),
+        y: s.y + (t.x - s.x) * Math.sin(th) + (t.y - s.y) * Math.cos(th),
+      };
+      koch(a, s, n - 1);
+      points.push(s);
+      koch(s, u, n - 1);
+      points.push(u);
+      koch(u, t, n - 1);
+      points.push(t);
+      koch(t, b, n - 1);
+    } 
+
+    koch(a, b, maxIterations);
+    points.push(b);
     
     // koch(a, b, n)
     // points.append(b)
