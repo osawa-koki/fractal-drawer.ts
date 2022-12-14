@@ -32,6 +32,7 @@ const RoseCurve = () => {
   let [timespan, setTimespan] = useState(3);
   let [timeEffect, setTimeEffect] = useState(false);
   let [immidiateEffect, setImmidiateEffect] = useState(true);
+  let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -40,9 +41,11 @@ const RoseCurve = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     if (immidiateEffect) Draw();
-  }, [canvasSize, n, k, size, step, timespan, timeEffect, immidiateEffect]);
+  }, [canvasSize, n, k, size, step, timespan, timeEffect, immidiateEffect, locked]);
 
   async function Draw() {
+    if (locked) return;
+    setLocked(true);
     ctx.clearRect(0, 0, canvasSize, canvasSize);
     let color = 0;
     for (let i = 0; i < 360 * n; i = i + step) {
@@ -55,6 +58,7 @@ const RoseCurve = () => {
       ctx.fillRect(x * zoom + canvasSize / 2, y * zoom + canvasSize / 2, 1, 1);
       if (timeEffect) await new Promise(resolve => setTimeout(resolve, timespan));
     }
+    setLocked(false);
   }
 
   return (
