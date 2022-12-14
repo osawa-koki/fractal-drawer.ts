@@ -29,8 +29,11 @@ const Buddhabrot = () => {
   let [yMax, setYMax] = useState(1.5);
   let [numberOfTrials, setNumberOfTrials] = useState(1000000);
   let [lighter, setLighter] = useState(0.01);
+  let [locked,  setLocked] = useState(false);
 
   function Draw() {
+    if (lcoked) return;
+    setLocked(true);
     if (canvasRef.current) {
       let canvas = canvasRef.current;
       let ctx = canvas.getContext('2d');
@@ -66,6 +69,7 @@ const Buddhabrot = () => {
         }
       }
     }
+    setLocked(false);
   }
 
   return (
