@@ -17,8 +17,6 @@ const rangeMin = 0;
 const rangeMax = 100;
 const maxIterationMinCount = 3;
 const maxIterationMaxCount = 10;
-const timespanMin = 100;
-const timespanMax = 1000;
 
 const divition = 3;
 
@@ -33,7 +31,6 @@ const KochCurve = () => {
   let [bx, setBx] = useState(90);
   let [by, setBy] = useState(50);
   let [maxIterations, setMaxIterations] = useState(5);
-  let [timespan, setTimespan] = useState(300);
   let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
@@ -43,7 +40,7 @@ const KochCurve = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     Draw(false);
-  }, [canvasSize, color, ax, ay, bx, by, maxIterations, timespan]);
+  }, [canvasSize, color, ax, ay, bx, by, maxIterations]);
 
   useEffect (() => {
     canvas = canvasRef.current!;
@@ -154,11 +151,6 @@ const KochCurve = () => {
             <th>Max Iterations</th>
             <td><Form.Range min={maxIterationMinCount} max={maxIterationMaxCount} onInput={(e) => {setMaxIterations(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{maxIterations}</td>
-          </tr>
-          <tr>
-            <th>Timespan</th>
-            <td><Form.Range min={timespanMin} max={timespanMax} onInput={(e) => {setTimespan(parseInt((e.target as HTMLInputElement).value))}} /></td>
-            <td>{timespan}ms</td>
           </tr>
         </tbody>
       </table>
