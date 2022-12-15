@@ -21,7 +21,7 @@ const Julia = () => {
 
   let [canvasSize, setCanvasSize] = useState(300);
   let [color, setColor] = useState(0);
-  let [maxIterations, setMaxIterations] = useState(20);
+  let [maxIterations, setMaxIterations] = useState(75);
   let [threshold, setThreshold] = useState(10);
   let [c, setC] = useState({x: -0.4, y: 0.6});
   let [xMin, setXMin] = useState(-1.5);
