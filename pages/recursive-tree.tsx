@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Layout from '../components/Layout';
 import Settings from '../components/Settings';
@@ -36,6 +37,7 @@ const RecursiveTree = () => {
   let [angle, setAngle] = useState(30);
   let [maxIterations, setMaxIterations] = useState(7);
   let [timespan, setTimespan] = useState(300);
+  let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -46,10 +48,20 @@ const RecursiveTree = () => {
     Draw(false);
   }, [canvasSize, shrink, length, angle, maxIterations, timespan]);
 
+  useEffect (() => {
+    canvas = canvasRef.current!;
+    ctx = canvas.getContext('2d')!;
+  }, [locked]);
+
   function Draw(execute: boolean = true) {
+    if (locked) return;
+    if (execute) setLocked(true);
     ctx.clearRect(0, 0, canvasSize, canvasSize);
     function RecDraw(x: number, y: number, deg: number, n: number) {
-      if (maxIterations < n) return;
+      if (maxIterations < n) {
+        setLocked(false);
+        return;
+      }
       const len = (shrink / 100) ** n * canvasSize * length / 100;
       const moved: moved_coordinate[] = [];
       { // 右側
@@ -106,7 +118,13 @@ const RecursiveTree = () => {
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
-        <Button variant="outline-primary" onClick={() => {Draw(true)}}>Draw!!!</Button>
+        <Button variant="outline-primary" onClick={() => {Draw(true)}}>
+          {
+            locked
+            ? <><Spinner animation="grow" variant="info" size="sm" />&nbsp;Drawing...</>
+            : <>Draw!!!</>
+          }
+        </Button>
       </div>
       <table id='Settings'>
         <tbody>

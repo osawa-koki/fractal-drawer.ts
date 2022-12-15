@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Layout from '../components/Layout';
 import Settings from '../components/Settings';
@@ -39,6 +40,7 @@ const PythagorasTree = () => {
   let [left, setLeft] = useState(35);
   let [bottom, setBottom] = useState(15);
   let [timespan, setTimespan] = useState(300);
+  let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -51,9 +53,16 @@ const PythagorasTree = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     Draw(false);
-  }, [canvasSize, color, size, degree, maxIterations, left, bottom]);
+  }, [canvasSize, color, size, degree, maxIterations, left, bottom, timespan]);
+
+  useEffect (() => {
+    canvas = canvasRef.current!;
+    ctx = canvas.getContext('2d')!;
+  }, [locked]);
 
   function Draw(execute: boolean) {
+    if (locked) return;
+    setLocked(true);
     ctx.clearRect(0, 0, canvasSize, canvasSize);
     ctx.fillStyle = `hsl(${color}, 100%, 50%)`;
     ctx.fillRect(
@@ -97,7 +106,10 @@ const PythagorasTree = () => {
       ] as coord[];
     }
     function recDraw(p1: coord, p2: coord, size: number, angle: number, n: number, i: number) {
-      if (n === 0) return;
+      if (n === 0) {
+        setLocked(false);
+        return;
+      }
       ctx.fillStyle = `hsl(${(320 / (maxIterations + 1) * i + color) % 360}, 100%, 50%)`;
 			(() => { // 左側
 				const smalledSize = Math.cos(degree * Math.PI / 180) * size;
@@ -163,7 +175,13 @@ const PythagorasTree = () => {
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
-        <Button variant="outline-primary" onClick={() => {Draw(true)}}>Draw!!!</Button>
+        <Button variant="outline-primary" onClick={() => {Draw(true)}}>
+          {
+            locked
+            ? <><Spinner animation="grow" variant="info" size="sm" />&nbsp;Drawing...</>
+            : <>Draw!!!</>
+          }
+        </Button>
       </div>
       <table id='Settings'>
         <tbody>

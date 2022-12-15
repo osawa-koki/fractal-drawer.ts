@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Layout from '../components/Layout';
 import Settings from '../components/Settings';
@@ -25,6 +26,7 @@ const SierpinskiTriangle = () => {
   let [triagleSize, setTriangleSize] = useState(70);
   let [maxIterations, setMaxIterations] = useState(5);
   let [timespan, setTimespan] = useState(300);
+  let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -35,7 +37,14 @@ const SierpinskiTriangle = () => {
     Draw(false);
   }, [canvasSize, color, triagleSize, maxIterations, timespan]);
 
+  useEffect (() => {
+    canvas = canvasRef.current!;
+    ctx = canvas.getContext('2d')!;
+  }, [locked]);
+
   function Draw(execute: boolean = true) {
+    if (locked) return;
+    if (execute) setLocked(true);
     const DrawTriangle = (x: number, y: number, size: number) => {
       const p1_x = x + size / 2; // 中央下
       const p1_y = y - Math.sin(-60 * Math.PI / 180) * size;
@@ -49,6 +58,7 @@ const SierpinskiTriangle = () => {
     }
     function recFx(x: number, y: number, size: number, n: number) {
       if (maxIterations < n) {
+        setLocked(false); // setTimeout関数は非同期で処理されるため、ここで実行完了を検知する。
         return;
       }
       if (n / 2 === 0) {
@@ -105,9 +115,7 @@ const SierpinskiTriangle = () => {
     ctx.lineTo(p2_x, p2_y);
     ctx.lineTo(p1_x + size / 2, p1_y);
     ctx.fill();
-    setTimeout(() => {
-      recFx(canvasSize / 2, start, size, 1);
-    }, timespan);
+    recFx(canvasSize / 2, start, size, 1);
   }
 
   return (
@@ -117,7 +125,13 @@ const SierpinskiTriangle = () => {
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
-        <Button variant="outline-primary" onClick={() => {Draw(true)}}>Draw!!!</Button>
+        <Button variant="outline-primary" onClick={() => {Draw(true)}}>
+          {
+            locked
+            ? <><Spinner animation="grow" variant="info" size="sm" />&nbsp;Drawing...</>
+            : <>Draw!!!</>
+          }
+        </Button>
       </div>
       <table id='Settings'>
         <tbody>

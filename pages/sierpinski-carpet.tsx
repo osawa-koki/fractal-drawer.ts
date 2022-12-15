@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Layout from '../components/Layout';
 import Settings from '../components/Settings';
@@ -30,6 +31,7 @@ const SierpinskiCarpet = () => {
   let [carpetSize, setCarpetSize] = useState(70);
   let [maxIterations, setMaxIterations] = useState(5);
   let [timespan, setTimespan] = useState(300);
+  let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -40,7 +42,14 @@ const SierpinskiCarpet = () => {
     Draw(false);
   }, [canvasSize, color, carpetSize, maxIterations, timespan]);
 
+  useEffect (() => {
+    canvas = canvasRef.current!;
+    ctx = canvas.getContext('2d')!;
+  }, [locked]);
+
   function Draw(execute: boolean = true) {
+    if (locked) return;
+    if (execute) setLocked(true);
     const cross_join = (arg: number[]): coord[] => {
       const answer: coord[] = [];
       arg.forEach(x => {
@@ -52,6 +61,7 @@ const SierpinskiCarpet = () => {
     }
     function recFx(x: number, y: number, size: number, n: number) {
       if (maxIterations < n) {
+        setLocked(false);
         return;
       }
       if (n / 2 === 0) {
@@ -102,7 +112,13 @@ const SierpinskiCarpet = () => {
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
-        <Button variant="outline-primary" onClick={() => {Draw(true)}}>Draw!!!</Button>
+        <Button variant="outline-primary" onClick={() => {Draw(true)}}>
+          {
+            locked
+            ? <><Spinner animation="grow" variant="info" size="sm" />&nbsp;Drawing...</>
+            : <>Draw!!!</>
+          }
+        </Button>
       </div>
       <table id='Settings'>
         <tbody>

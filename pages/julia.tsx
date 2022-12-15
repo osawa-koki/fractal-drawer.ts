@@ -21,15 +21,18 @@ const Julia = () => {
 
   let [canvasSize, setCanvasSize] = useState(300);
   let [color, setColor] = useState(0);
-  let [maxIterations, setMaxIterations] = useState(20);
+  let [maxIterations, setMaxIterations] = useState(75);
   let [threshold, setThreshold] = useState(10);
   let [c, setC] = useState({x: -0.4, y: 0.6});
   let [xMin, setXMin] = useState(-1.5);
   let [xMax, setXMax] = useState(1.5);
   let [yMin, setYMin] = useState(-1.5);
   let [yMax, setYMax] = useState(1.5);
+  let [locked,  setLocked] = useState(false);
 
   function Draw() {
+    if (locked) return;
+    setLocked(true);
     let canvas = canvasRef.current;
     if (canvas) {
       let ctx = canvas.getContext('2d');
@@ -50,7 +53,7 @@ const Julia = () => {
               i++;
             }
             if (i == maxIterations) {
-              ctx.fillStyle = '#000000';
+              ctx.fillStyle = 'black';
             } else {
               ctx.fillStyle = `hsl(${color + i * 360 / maxIterations}, 100%, 50%)`;
             }
@@ -59,6 +62,7 @@ const Julia = () => {
         }
       }
     }
+    setLocked(false);
   }
 
   return (
