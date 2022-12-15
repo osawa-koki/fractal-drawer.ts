@@ -5,6 +5,8 @@ import '../pages/global.scss';
 
 import '../pages/index.scss';
 
+import '../components/Loader.scss';
+
 export default function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />
 };
