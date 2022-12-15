@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 import Layout from '../components/Layout';
 import Settings from '../components/Settings';
+import coord from '../src/coord';
 
 const pageName = 'Sierpinski Carpet';
 
@@ -16,11 +17,6 @@ const maxIterationMinCount = 3;
 const maxIterationMaxCount = 15;
 const timespanMin = 100;
 const timespanMax = 1000;
-
-type coord = {
-  x: number;
-  y: number;
-};
 
 const SierpinskiCarpet = () => {
 

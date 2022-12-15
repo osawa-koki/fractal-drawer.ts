@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 
 import Layout from '../components/Layout';
 import Settings from '../components/Settings';
+import coord from '../src/coord';
 
 const pageName = 'Koch Curve';
 
@@ -15,11 +16,6 @@ const maxIterationMinCount = 3;
 const maxIterationMaxCount = 15;
 const timespanMin = 100;
 const timespanMax = 1000;
-
-type coord = {
-  x: number;
-  y: number;
-};
 
 const divition = 3;
 
@@ -43,99 +39,36 @@ const KochCurve = () => {
   }, [canvasSize, color, triagleSize, maxIterations, timespan]);
 
   function Draw(execute: boolean = true) {
-    // th = math.pi * 60 / 180   # 正三角形の角度をラジアン化
-    // a = (0.0, 0.0)
-    // b = (100.0, 0.0)
-    // n = 5  # 繰り返し数
-    // points = [a]  # 各点の座標を入れておくリスト(最終的にこれをプロット)
-    
-    const th = Math.PI * 60 / 180;
-    const a: coord = {x: 0, y: 20};
-    const b: coord = {x: canvasSize, y: 0};
-    const points = [];
-      
-    function koch(a: coord, b: coord, n: number) {
-      if (n === 0) return;
-      const s: coord = {x: (a.x + b.x - a.x) / divition, y: (b.y - a.y) / divition};
-      const t: coord = {x: (a.x + b.x - a.x) * 2 / divition, y: a.y + b.y - a.y * 2 / divition};
-      const u: coord = {
-        x: s.x + (t.x - s.x) * Math.cos(th) - (t.y, s.y) * Math.sin(th),
-        y: s.y + (t.x - s.x) * Math.sin(th) + (t.y - s.y) * Math.cos(th),
-      };
-      koch(a, s, n - 1);
-      points.push(s);
-      koch(s, u, n - 1);
-      points.push(u);
-      koch(u, t, n - 1);
-      points.push(t);
-      koch(t, b, n - 1);
-    } 
-
-    koch(a, b, maxIterations);
-    points.push(b);
-    
-    // koch(a, b, n)
-    // points.append(b)
-    // x = [points[i][0] for i in range(len(points))]
-    // y = [points[i][1] for i in range(len(points))]
-    // plt.plot(x, y, linewidth=0.5)
-    // plt.axis('equal')
-    // plt.savefig('Koch1.png')
-    // python -> javascript
-    // https://qiita.com/okamoai/items/1b0c1b0c1b0c1b0c1b0c
-    // https://qiita.com/okamoai/items/1b0c1b0c1b0c1b0c1b0c
-
-    let a = [0, 0];
-    let b = [canvasSize, 0];
-    let points = [a];
-
-    function koch(a: number[], b: number[], n: number) {
-      if (n == 0) {
-        return;
+    function KochCurveRecursive(startPoint: coord, endPoint: coord, middlePoint: coord, iterations: number) {
+      if (iterations > 0) {
+        let newStartPoint: coord = {x: startPoint.x + (middlePoint.x - startPoint.x) / divition, y: startPoint.y + (middlePoint.y - startPoint.y) / divition};
+        let newEndPoint: coord = {x: endPoint.x + (middlePoint.x - endPoint.x) / divition, y: endPoint.y + (middlePoint.y - endPoint.y) / divition};
+        let newMiddlePoint: coord = {x: startPoint.x + (endPoint.x - startPoint.x) / divition, y: startPoint.y + (endPoint.y - startPoint.y) / divition};
+        KochCurveRecursive(startPoint, newStartPoint, newMiddlePoint, iterations - 1);
+        KochCurveRecursive(newStartPoint, newEndPoint, newMiddlePoint, iterations - 1);
+        KochCurveRecursive(newEndPoint, endPoint, newMiddlePoint, iterations - 1);
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(startPoint.x, startPoint.y);
+        ctx.lineTo(endPoint.x, endPoint.y);
+        ctx.stroke();
       }
-      let s = [a[0] + (b[0] - a[0]) / 3, a[1] + (b[1] - a[1]) / 3];
-      let t = [a[0] + (b[0] - a[0]) * 2 / 3, a[1] + (b[1] - a[1]) * 2 / 3];
-      let u = [s[0] + (t[0] - s[0]) * Math.cos(Math.PI * 60 / 180) - (t[1] - s[1]) * Math.sin(Math.PI * 60 / 180), s[1] + (t[0] - s[0]) * Math.sin(Math.PI * 60 / 180) + (t[1] - s[1]) * Math.cos(Math.PI * 60 / 180)];
-      koch(a, s, n - 1);
-      points.push(s);
-      koch(s, u, n - 1);
-      points.push(u);
-      koch(u, t, n - 1);
-      points.push(t);
-      koch(t, b, n - 1);
     }
-
-    koch(a, b, maxIterations);
-    points.push(b);
-
-    let x = points.map((p) => {return p[0]});
-    let y = points.map((p) => {return p[1]});
-    let xMin = Math.min(...x);
-    let xMax = Math.max(...x);
-    let yMin = Math.min(...y);
-    let yMax = Math.max(...y);
-    let xRange = xMax - xMin;
-    let yRange = yMax - yMin;
-    let xScale = canvasSize / xRange;
-    let yScale = canvasSize / yRange;
-    let scale = Math.min(xScale, yScale);
-    let xCenter = (xMin + xMax) / 2;
-    let yCenter = (yMin + yMax) / 2;
-    let xShift = (canvasSize - xRange * scale) / 2;
-    let yShift = (canvasSize - yRange * scale) / 2;
-
     if (execute) {
       ctx.clearRect(0, 0, canvasSize, canvasSize);
+      ctx.fillStyle = `hsl(${color}, 100%, 50%)`;
+      ctx.strokeStyle = `hsl(${color}, 100%, 50%)`;
       ctx.beginPath();
-      ctx.moveTo((x[0] - xCenter) * scale + xShift, (y[0] - yCenter) * scale + yShift);
-      for (let i = 1; i < x.length; i++) {
-        ctx.lineTo((x[i] - xCenter) * scale + xShift, (y[i] - yCenter) * scale + yShift);
-      }
-      ctx.closePath();
+      let startPoint: coord = {x: canvasSize / 2, y: canvasSize / 2 - canvasSize * triagleSize / 200};
+      let endPoint: coord = {x: canvasSize / 2 - canvasSize * triagleSize / 200, y: canvasSize / 2 + canvasSize * triagleSize / 200};
+      let middlePoint: coord = {x: canvasSize / 2 + canvasSize * triagleSize / 200, y: canvasSize / 2 + canvasSize * triagleSize / 200};
+      ctx.moveTo(startPoint.x, startPoint.y);
+      ctx.lineTo(endPoint.x, endPoint.y);
+      ctx.lineTo(middlePoint.x, middlePoint.y);
+      ctx.lineTo(startPoint.x, startPoint.y);
       ctx.stroke();
+      KochCurveRecursive(startPoint, endPoint, middlePoint, maxIterations);
     }
-
-    
   }
 
   return (
