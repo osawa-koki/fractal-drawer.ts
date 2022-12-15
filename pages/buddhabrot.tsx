@@ -1,11 +1,15 @@
 import React, { useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Layout from '../components/Layout';
+import Loader from '../components/Loader';
 import Settings from '../components/Settings';
 
 const pageName = 'Buddhabrot';
+
+const lock_affect_time = 100;
 
 const canvasMinSize = 100;
 const canvasMaxSize = 500;
@@ -31,9 +35,10 @@ const Buddhabrot = () => {
   let [lighter, setLighter] = useState(0.01);
   let [locked,  setLocked] = useState(false);
 
-  function Draw() {
+  async function Draw() {
     if (locked) return;
     setLocked(true);
+    await new Promise(resolve => setTimeout(resolve, lock_affect_time));
     if (canvasRef.current) {
       let canvas = canvasRef.current;
       let ctx = canvas.getContext('2d');
@@ -79,7 +84,13 @@ const Buddhabrot = () => {
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
-        <Button variant="outline-primary" onClick={Draw}>Draw!!!</Button>
+        <Button variant="outline-primary" onClick={Draw}>
+          {
+            locked
+            ? <><Spinner animation="grow" variant="info" size="sm" />&nbsp;Drawing...</>
+            : <>Draw!!!</>
+          }
+        </Button>
       </div>
       <table id='Settings'>
         <tbody>
