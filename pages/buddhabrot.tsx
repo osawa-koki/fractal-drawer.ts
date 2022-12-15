@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 
 import Layout from '../components/Layout';
-import Loader from '../components/Loader';
 import Settings from '../components/Settings';
 
 const pageName = 'Buddhabrot';
