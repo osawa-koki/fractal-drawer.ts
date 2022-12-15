@@ -18,7 +18,7 @@ const rangeMax = 100;
 const maxIterationMinCount = 3;
 const maxIterationMaxCount = 10;
 const timespanMin = 10;
-const timespanMax = 300;
+const timespanMax = 500;
 
 const divition = 3;
 
@@ -33,7 +33,7 @@ const KochCurve = () => {
   let [bx, setBx] = useState(90);
   let [by, setBy] = useState(90);
   let [maxIterations, setMaxIterations] = useState(5);
-  let [timespan, setTimespan] = useState(100);
+  let [timespan, setTimespan] = useState(250);
   let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;

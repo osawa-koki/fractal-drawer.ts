@@ -18,7 +18,7 @@ const maxIterationMaxCount = 10;
 const sizeMin = 50;
 const sizeMax = 70;
 const timespanMin = 10;
-const timespanMax = 300;
+const timespanMax = 500;
 
 const divition = 3;
 
@@ -31,7 +31,7 @@ const KochSnowflake = () => {
   let [triagleSize, setTriagleSize] = useState(70);
   let [maxIterations, setMaxIterations] = useState(5);
   let [fill, setFill] = useState(false);
-  let [timespan, setTimespan] = useState(100);
+  let [timespan, setTimespan] = useState(250);
   let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
