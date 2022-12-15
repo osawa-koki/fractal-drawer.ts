@@ -16,7 +16,7 @@ const canvasMaxSize = 500;
 const maxIterationMinCount = 3;
 const maxIterationMaxCount = 10;
 const sizeMin = 50;
-const sizeMax = 100;
+const sizeMax = 70;
 const timespanMin = 10;
 const timespanMax = 300;
 
@@ -28,8 +28,9 @@ const KochSnowflake = () => {
 
   let [canvasSize, setCanvasSize] = useState(300);
   let [color, setColor] = useState(200);
-  let [triagleSize, setTriagleSize] = useState(90);
+  let [triagleSize, setTriagleSize] = useState(70);
   let [maxIterations, setMaxIterations] = useState(5);
+  let [fill, setFill] = useState(false);
   let [timespan, setTimespan] = useState(100);
   let [locked, setLocked] = useState(false);
 
@@ -74,11 +75,13 @@ const KochSnowflake = () => {
       CalcPoints(t, b, points, n - 1);
     }
     ctx.clearRect(0, 0, canvasSize, canvasSize);
+    ctx.fillStyle = `hsl(${color}, 100%, 50%)`;
     ctx.strokeStyle = `hsl(${color}, 100%, 50%)`;
     ctx.lineWidth = 1;
     const [size, start] = [
       canvasSize * triagleSize / 100,
-      (canvasSize - (Math.sqrt(3) * canvasSize * triagleSize / 100 / 2)) / 2,
+      // 括弧内の数字はかなりテキトー。目視で調整しただけで、数式的には何も考えていない。
+      (canvasSize - (Math.sqrt(3) * canvasSize * triagleSize / 100 / 2) - (((canvasSize / 5)))) / 2,
     ];
     const _a: coord = {x: canvasSize / 2, y: start};
     const _b: coord = {x: canvasSize / 2 - size / 2, y: start + Math.sqrt(3) * size / 2};
@@ -90,6 +93,7 @@ const KochSnowflake = () => {
       ctx.lineTo(_c.x, _c.y);
       ctx.closePath();
       ctx.stroke();
+      if (fill) ctx.fill();
       return;
     }
     for (let i = 1; i <= maxIterations; i++) {
@@ -105,6 +109,7 @@ const KochSnowflake = () => {
       }
       ctx.closePath();
       ctx.stroke();
+      if (fill) ctx.fill();
       await new Promise(resolve => setTimeout(resolve, timespan));
     }
     setLocked(false);
@@ -151,6 +156,11 @@ const KochSnowflake = () => {
             <th>Max Iterations</th>
             <td><Form.Range min={maxIterationMinCount} max={maxIterationMaxCount} onInput={(e) => {setMaxIterations(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{maxIterations}</td>
+          </tr>
+          <tr>
+            <th>Fill</th>
+            <td><Form.Check type='checkbox' onChange={(e) => {setFill((e.target as HTMLInputElement).checked)}} /></td>
+            <td>{fill ? 'Yes' : 'No'}</td>
           </tr>
         </tbody>
       </table>
