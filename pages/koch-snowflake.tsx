@@ -41,7 +41,7 @@ const KochSnowflake = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     Draw(false);
-  }, [canvasSize, color, triagleSize, maxIterations, timespan]);
+  }, [canvasSize, color, triagleSize, maxIterations, fill, timespan]);
 
   useEffect (() => {
     canvas = canvasRef.current!;
