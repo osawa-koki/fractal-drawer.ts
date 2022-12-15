@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Layout from '../components/Layout';
 import Settings from '../components/Settings';
@@ -39,11 +40,16 @@ const SierpinskiCarpet = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     Draw(false);
-  }, [canvasSize, color, carpetSize, maxIterations, timespan, locked]);
+  }, [canvasSize, color, carpetSize, maxIterations, timespan]);
+
+  useEffect (() => {
+    canvas = canvasRef.current!;
+    ctx = canvas.getContext('2d')!;
+  }, [locked]);
 
   function Draw(execute: boolean = true) {
     if (locked) return;
-    setLocked(true);
+    if (execute) setLocked(true);
     const cross_join = (arg: number[]): coord[] => {
       const answer: coord[] = [];
       arg.forEach(x => {
@@ -106,7 +112,13 @@ const SierpinskiCarpet = () => {
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
-        <Button variant="outline-primary" onClick={() => {Draw(true)}}>Draw!!!</Button>
+        <Button variant="outline-primary" onClick={() => {Draw(true)}}>
+          {
+            locked
+            ? <><Spinner animation="grow" variant="info" size="sm" />&nbsp;Drawing...</>
+            : <>Draw!!!</>
+          }
+        </Button>
       </div>
       <table id='Settings'>
         <tbody>
