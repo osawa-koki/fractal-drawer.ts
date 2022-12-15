@@ -7,32 +7,30 @@ import Layout from '../components/Layout';
 import Settings from '../components/Settings';
 import coord from '../src/coord';
 
-const pageName = 'Koch Curve';
+const pageName = 'Koch Snowflake';
 
 const lock_affect_time = 100;
 
 const canvasMinSize = 100;
 const canvasMaxSize = 500;
-const rangeMin = 0;
-const rangeMax = 100;
 const maxIterationMinCount = 3;
 const maxIterationMaxCount = 10;
+const sizeMin = 50;
+const sizeMax = 70;
 const timespanMin = 10;
 const timespanMax = 500;
 
 const divition = 3;
 
-const KochCurve = () => {
+const KochSnowflake = () => {
 
   let canvasRef = useRef<HTMLCanvasElement>(null);
 
   let [canvasSize, setCanvasSize] = useState(300);
   let [color, setColor] = useState(200);
-  let [ax, setAx] = useState(10);
-  let [ay, setAy] = useState(10);
-  let [bx, setBx] = useState(90);
-  let [by, setBy] = useState(90);
+  let [triagleSize, setTriagleSize] = useState(70);
   let [maxIterations, setMaxIterations] = useState(5);
+  let [fill, setFill] = useState(false);
   let [timespan, setTimespan] = useState(250);
   let [locked, setLocked] = useState(false);
 
@@ -43,7 +41,7 @@ const KochCurve = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     Draw(false);
-  }, [canvasSize, color, ax, ay, bx, by, maxIterations, timespan]);
+  }, [canvasSize, color, triagleSize, maxIterations, fill, timespan]);
 
   useEffect (() => {
     canvas = canvasRef.current!;
@@ -77,36 +75,48 @@ const KochCurve = () => {
       CalcPoints(t, b, points, n - 1);
     }
     ctx.clearRect(0, 0, canvasSize, canvasSize);
+    ctx.fillStyle = `hsl(${color}, 100%, 50%)`;
     ctx.strokeStyle = `hsl(${color}, 100%, 50%)`;
     ctx.lineWidth = 1;
-    const _ax = ax * canvasSize / 100;
-    const _ay = canvasSize - (ay * canvasSize / 100);
-    const _bx = bx * canvasSize / 100;
-    const _by = canvasSize - (by * canvasSize / 100);
+    const [size, start] = [
+      canvasSize * triagleSize / 100,
+      // 括弧内の数字はかなりテキトー。目視で調整しただけで、数式的には何も考えていない。
+      (canvasSize - (Math.sqrt(3) * canvasSize * triagleSize / 100 / 2) - (((canvasSize / 5)))) / 2,
+    ];
+    const _a: coord = {x: canvasSize / 2, y: start};
+    const _b: coord = {x: canvasSize / 2 - size / 2, y: start + Math.sqrt(3) * size / 2};
+    const _c: coord = {x: canvasSize / 2 + size / 2, y: start + Math.sqrt(3) * size / 2};
     if (execute === false) {
       ctx.beginPath();
-      ctx.moveTo(_ax, _ay);
-      ctx.lineTo(_bx, _by);
+      ctx.moveTo(_a.x, _a.y);
+      ctx.lineTo(_b.x, _b.y);
+      ctx.lineTo(_c.x, _c.y);
+      ctx.closePath();
       ctx.stroke();
+      if (fill) ctx.fill();
       return;
     }
     for (let i = 1; i <= maxIterations; i++) {
       ctx.clearRect(0, 0, canvasSize, canvasSize);
       const points: coord[] = [];
-      CalcPoints({x: _ax, y: _ay}, {x: _bx, y: _by}, points, i);
+      CalcPoints(_a, _b, points, i);
+      CalcPoints(_b, _c, points, i);
+      CalcPoints(_c, _a, points, i);
       ctx.beginPath();
       ctx.moveTo(points[0].x, points[0].y);
       for (let j = 1; j < points.length; j++) {
         ctx.lineTo(points[j].x, points[j].y);
       }
+      ctx.closePath();
       ctx.stroke();
+      if (fill) ctx.fill();
       await new Promise(resolve => setTimeout(resolve, timespan));
     }
     setLocked(false);
   }
 
   return (
-    <Layout title={`${pageName} (${Settings.ProjectName})`} favicon='feature-image/koch-curve.png'>
+    <Layout title={`${pageName} (${Settings.ProjectName})`} favicon='feature-image/koch-snowflake.png'>
       <div id='CanvasArea'>
         <h1>{pageName}</h1>
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
@@ -133,24 +143,9 @@ const KochCurve = () => {
             <td style={{backgroundColor: `hsl(${color}, 100%, 50%)`}}></td>
           </tr>
           <tr>
-            <th>a.x</th>
-            <td><Form.Range min={rangeMin} max={rangeMax} onInput={(e) => {setAx(parseInt((e.target as HTMLInputElement).value))}} /></td>
-            <td>{ax}</td>
-          </tr>
-          <tr>
-            <th>a.y</th>
-            <td><Form.Range min={rangeMin} max={rangeMax} onInput={(e) => {setAy(parseInt((e.target as HTMLInputElement).value))}} /></td>
-            <td>{ay}</td>
-          </tr>
-          <tr>
-            <th>b.x</th>
-            <td><Form.Range min={rangeMin} max={rangeMax} onInput={(e) => {setBx(parseInt((e.target as HTMLInputElement).value))}} /></td>
-            <td>{bx}</td>
-          </tr>
-          <tr>
-            <th>b.y</th>
-            <td><Form.Range min={rangeMin} max={rangeMax} onInput={(e) => {setBy(parseInt((e.target as HTMLInputElement).value))}} /></td>
-            <td>{by}</td>
+            <th>Size</th>
+            <td><Form.Range min={sizeMin} max={sizeMax} onInput={(e) => {setTriagleSize(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td>{triagleSize}</td>
           </tr>
           <tr>
             <th>Timespan</th>
@@ -162,10 +157,15 @@ const KochCurve = () => {
             <td><Form.Range min={maxIterationMinCount} max={maxIterationMaxCount} onInput={(e) => {setMaxIterations(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{maxIterations}</td>
           </tr>
+          <tr>
+            <th>Fill</th>
+            <td><Form.Check type='checkbox' onChange={(e) => {setFill((e.target as HTMLInputElement).checked)}} /></td>
+            <td>{fill ? 'Yes' : 'No'}</td>
+          </tr>
         </tbody>
       </table>
     </Layout>
   );
 };
 
-export default KochCurve;
+export default KochSnowflake;
