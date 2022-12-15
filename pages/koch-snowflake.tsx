@@ -76,7 +76,10 @@ const KochSnowflake = () => {
     ctx.clearRect(0, 0, canvasSize, canvasSize);
     ctx.strokeStyle = `hsl(${color}, 100%, 50%)`;
     ctx.lineWidth = 1;
-    const [size, start] = [canvasSize * triagleSize / 100, (canvasSize - (Math.sqrt(3) * canvasSize * triagleSize / 100 / 2)) / 2];
+    const [size, start] = [
+      canvasSize * triagleSize / 100,
+      (canvasSize - (Math.sqrt(3) * canvasSize * triagleSize / 100 / 2)) / 2,
+    ];
     const _a: coord = {x: canvasSize / 2, y: start};
     const _b: coord = {x: canvasSize / 2 - size / 2, y: start + Math.sqrt(3) * size / 2};
     const _c: coord = {x: canvasSize / 2 + size / 2, y: start + Math.sqrt(3) * size / 2};
@@ -92,13 +95,16 @@ const KochSnowflake = () => {
     for (let i = 1; i <= maxIterations; i++) {
       ctx.clearRect(0, 0, canvasSize, canvasSize);
       const points: coord[] = [];
-      // CalcPoints({x: _ax, y: _ay}, {x: _bx, y: _by}, points, i);
-      // ctx.beginPath();
-      // ctx.moveTo(points[0].x, points[0].y);
-      // for (let j = 1; j < points.length; j++) {
-      //   ctx.lineTo(points[j].x, points[j].y);
-      // }
-      // ctx.stroke();
+      CalcPoints(_a, _b, points, i);
+      CalcPoints(_b, _c, points, i);
+      CalcPoints(_c, _a, points, i);
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let j = 1; j < points.length; j++) {
+        ctx.lineTo(points[j].x, points[j].y);
+      }
+      ctx.closePath();
+      ctx.stroke();
       await new Promise(resolve => setTimeout(resolve, timespan));
     }
     setLocked(false);
