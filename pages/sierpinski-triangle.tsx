@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Layout from '../components/Layout';
 import Settings from '../components/Settings';
@@ -34,11 +35,16 @@ const SierpinskiTriangle = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     Draw(false);
-  }, [canvasSize, color, triagleSize, maxIterations, timespan, locked]);
+  }, [canvasSize, color, triagleSize, maxIterations, timespan]);
+
+  useEffect (() => {
+    canvas = canvasRef.current!;
+    ctx = canvas.getContext('2d')!;
+  }, [locked]);
 
   function Draw(execute: boolean = true) {
     if (locked) return;
-    setLocked(true);
+    if (execute) setLocked(true);
     const DrawTriangle = (x: number, y: number, size: number) => {
       const p1_x = x + size / 2; // 中央下
       const p1_y = y - Math.sin(-60 * Math.PI / 180) * size;
@@ -119,7 +125,13 @@ const SierpinskiTriangle = () => {
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
-        <Button variant="outline-primary" onClick={() => {Draw(true)}}>Draw!!!</Button>
+        <Button variant="outline-primary" onClick={() => {Draw(true)}}>
+          {
+            locked
+            ? <><Spinner animation="grow" variant="info" size="sm" />&nbsp;Drawing...</>
+            : <>Draw!!!</>
+          }
+        </Button>
       </div>
       <table id='Settings'>
         <tbody>
