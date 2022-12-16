@@ -10,12 +10,11 @@ const pageName = 'Burning Ship';
 
 const canvasMinSize = 100;
 const canvasMaxSize = 500;
-const rangeMin = 0;
-const rangeMax = 100;
-const deltaMin = 10;
-const deltaMax = 100;
 const maxIterationMinCount = 3;
-const maxIterationMaxCount = 15;
+const maxIterationMaxCount = 100;
+const thresholdMin = 3;
+const thresholdMax = 100;
+const axis_delta = 0.1;
 
 const BurningShip = () => {
 
@@ -23,10 +22,12 @@ const BurningShip = () => {
 
   let [canvasSize, setCanvasSize] = useState(300);
   let [color, setColor] = useState(0);
-  let [x, setX] = useState(38);
-  let [y, setY] = useState(70);
-  let [delta, setDelta] = useState(120);
-  let [maxIterations, setMaxIterations] = useState(10);
+  let [maxIterations, setMaxIterations] = useState(20);
+  let [threshold, setThreshold] = useState(10);
+  let [xMin, setXMin] = useState(-2.5);
+  let [xMax, setXMax] = useState(1);
+  let [yMin, setYMin] = useState(-2.5);
+  let [yMax, setYMax] = useState(0.5);
   let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
@@ -36,17 +37,51 @@ const BurningShip = () => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
     Draw(false);
-  }, [canvasSize, color, x, y, delta, maxIterations]);
+  }, [canvasSize, color, maxIterations, threshold, xMin, xMax, yMin, yMax]);
 
   useEffect (() => {
     canvas = canvasRef.current!;
     ctx = canvas.getContext('2d')!;
   }, [locked]);
 
-  const Draw = (execute: boolean) => {
+  function Draw(execute: boolean = true) {
+    if (execute === false) return;
     if (locked) return;
     setLocked(true);
-    ctx.clearRect(0, 0, canvasSize, canvasSize);
+    let canvas = canvasRef.current;
+    if (canvas) {
+      let ctx = canvas.getContext('2d');
+      if (ctx) {
+        let xRange = xMax - xMin;
+        let yRange = yMax - yMin;
+        let xStep = xRange / canvasSize;
+        let yStep = yRange / canvasSize;
+        for (let x = 0; x < canvasSize; x++) {
+          for (let y = 0; y < canvasSize; y++) {
+            let x0 = xMin + x * xStep;
+            let y0 = yMin + y * yStep;
+            let x1 = 0;
+            let y1 = 0;
+            let i = 0;
+            while (x1 * x1 + y1 * y1 < threshold && i < maxIterations) {
+              let x2 = Math.abs(x1 * x1 - y1 * y1 + x0);
+              let y2 = Math.abs(2 * x1 * y1 + y0);
+              x1 = x2;
+              y1 = y2;
+              i++;
+            }
+            if (i === maxIterations) {
+              ctx.fillStyle = 'black';
+            } else {
+              console.log(i);
+
+              ctx.fillStyle = `hsla(${(i * 360 / maxIterations + color) % 360}, 100%, 50%, 1)`;
+            }
+            ctx.fillRect(x, y, 1, 1);
+          }
+        }
+      }
+    }
     setLocked(false);
   }
 
@@ -73,29 +108,39 @@ const BurningShip = () => {
             <td>{canvasSize}</td>
           </tr>
           <tr>
-            <th>Color</th>
-            <td><Form.Range min={0} max={360} onInput={(e) => {setColor(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <th>Color (start)</th>
+            <td><Form.Range min={0} max={360} value={color} onInput={(e) => {setColor(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td style={{backgroundColor: `hsl(${color}, 100%, 50%)`}}></td>
           </tr>
           <tr>
-            <th>x</th>
-            <td><Form.Range min={rangeMin} max={rangeMax} onInput={(e) => {setX(parseInt((e.target as HTMLInputElement).value))}} /></td>
-            <td>{x}</td>
-          </tr>
-          <tr>
-            <th>y</th>
-            <td><Form.Range min={rangeMin} max={rangeMax} onInput={(e) => {setY(parseInt((e.target as HTMLInputElement).value))}} /></td>
-            <td>{y}</td>
-          </tr>
-          <tr>
-            <th>Delta</th>
-            <td><Form.Range min={deltaMin} max={deltaMax} onInput={(e) => {setDelta(parseInt((e.target as HTMLInputElement).value))}} /></td>
-            <td>{delta}</td>
-          </tr>
-          <tr>
             <th>Max Iterations</th>
-            <td><Form.Range min={maxIterationMinCount} max={maxIterationMaxCount} onInput={(e) => {setMaxIterations(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td><Form.Range min={maxIterationMinCount} max={maxIterationMaxCount} value={maxIterations} onInput={(e) => {setMaxIterations(parseInt((e.target as HTMLInputElement).value))}} /></td>
             <td>{maxIterations}</td>
+          </tr>
+          <tr>
+            <th>Threshold</th>
+            <td><Form.Range min={thresholdMin} max={thresholdMax} value={threshold} onInput={(e) => {setThreshold(parseInt((e.target as HTMLInputElement).value))}} /></td>
+            <td>{threshold}</td>
+          </tr>
+          <tr>
+            <th>X Min</th>
+            <td><Form.Control type='number' step={axis_delta} value={xMin} onInput={(e) => {setXMin(parseFloat((e.target as HTMLInputElement).value))}} /></td>
+            <td>{xMin}</td>
+          </tr>
+          <tr>
+            <th>X Max</th>
+            <td><Form.Control type='number' step={axis_delta} value={xMax} onInput={(e) => {setXMax(parseFloat((e.target as HTMLInputElement).value))}} /></td>
+            <td>{xMax}</td>
+          </tr>
+          <tr>
+            <th>Y Min</th>
+            <td><Form.Control type='number' step={axis_delta} value={yMin} onInput={(e) => {setYMin(parseFloat((e.target as HTMLInputElement).value))}} /></td>
+            <td>{yMin}</td>
+          </tr>
+          <tr>
+            <th>Y Max</th>
+            <td><Form.Control type='number' step={axis_delta} value={yMax} onInput={(e) => {setYMax(parseFloat((e.target as HTMLInputElement).value))}} /></td>
+            <td>{yMax}</td>
           </tr>
         </tbody>
       </table>
