@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
@@ -29,39 +29,47 @@ const Mandelbrot = () => {
   let [yMax, setYMax] = useState(1.5);
   let [locked, setLocked] = useState(false);
 
-  function Draw() {
+  let canvas: HTMLCanvasElement;
+  let ctx: CanvasRenderingContext2D;
+
+  useEffect (() => {
+    canvas = canvasRef.current!;
+    ctx = canvas.getContext('2d')!;
+    Draw(false);
+  }, [canvasSize, color, maxIterations, threshold, xMin, xMax, yMin, yMax]);
+
+  useEffect (() => {
+    canvas = canvasRef.current!;
+    ctx = canvas.getContext('2d')!;
+  }, [locked]);
+
+  function Draw(execute: boolean) {
     if (locked) return;
     setLocked(true);
-    let canvas = canvasRef.current;
-    if (canvas) {
-      let ctx = canvas.getContext('2d');
-      if (ctx) {
-        let xRange = xMax - xMin;
-        let yRange = yMax - yMin;
-        let xStep = xRange / canvasSize;
-        let yStep = yRange / canvasSize;
-        for (let x = 0; x < canvasSize; x++) {
-          for (let y = 0; y < canvasSize; y++) {
-            let x0 = xMin + x * xStep;
-            let y0 = yMin + y * yStep;
-            let x1 = 0;
-            let y1 = 0;
-            let i = 0;
-            while (x1 * x1 + y1 * y1 < threshold && i < maxIterations) {
-              let x2 = x1 * x1 - y1 * y1 + x0;
-              let y2 = 2 * x1 * y1 + y0;
-              x1 = x2;
-              y1 = y2;
-              i++;
-            }
-            if (i === maxIterations) {
-              ctx.fillStyle = 'black';
-            } else {
-              ctx.fillStyle = `hsla(${(i * 360 / maxIterations + color) % 360}, 100%, 50%, 1)`;
-            }
-            ctx.fillRect(x, y, 1, 1);
-          }
+    let xRange = xMax - xMin;
+    let yRange = yMax - yMin;
+    let xStep = xRange / canvasSize;
+    let yStep = yRange / canvasSize;
+    for (let x = 0; x < canvasSize; x++) {
+      for (let y = 0; y < canvasSize; y++) {
+        let x0 = xMin + x * xStep;
+        let y0 = yMin + y * yStep;
+        let x1 = 0;
+        let y1 = 0;
+        let i = 0;
+        while (x1 * x1 + y1 * y1 < threshold && i < maxIterations) {
+          let x2 = x1 * x1 - y1 * y1 + x0;
+          let y2 = 2 * x1 * y1 + y0;
+          x1 = x2;
+          y1 = y2;
+          i++;
         }
+        if (i === maxIterations) {
+          ctx.fillStyle = 'black';
+        } else {
+          ctx.fillStyle = `hsla(${(i * 360 / maxIterations + color) % 360}, 100%, 50%, 1)`;
+        }
+        ctx.fillRect(x, y, 1, 1);
       }
     }
     setLocked(false);
@@ -74,7 +82,7 @@ const Mandelbrot = () => {
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
-        <Button variant="outline-primary" onClick={Draw}>Draw!!!</Button>
+        <Button variant="outline-primary" onClick={() => {Draw(true)}}>Draw!!!</Button>
       </div>
       <table id='Settings'>
         <tbody>
