@@ -21,13 +21,13 @@ const BurningShip = () => {
   let canvasRef = useRef<HTMLCanvasElement>(null);
 
   let [canvasSize, setCanvasSize] = useState(300);
-  let [color, setColor] = useState(0);
+  let [color, setColor] = useState(80);
   let [maxIterations, setMaxIterations] = useState(20);
   let [threshold, setThreshold] = useState(10);
-  let [xMin, setXMin] = useState(-2.5);
-  let [xMax, setXMax] = useState(1);
-  let [yMin, setYMin] = useState(-2.5);
-  let [yMax, setYMax] = useState(0.5);
+  let [xMin, setXMin] = useState(-1.8);
+  let [xMax, setXMax] = useState(-1.7);
+  let [yMin, setYMin] = useState(-0.1);
+  let [yMax, setYMax] = useState(0.02);
   let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
@@ -73,8 +73,6 @@ const BurningShip = () => {
             if (i === maxIterations) {
               ctx.fillStyle = 'black';
             } else {
-              console.log(i);
-
               ctx.fillStyle = `hsla(${(i * 360 / maxIterations + color) % 360}, 100%, 50%, 1)`;
             }
             ctx.fillRect(x, y, 1, 1);
