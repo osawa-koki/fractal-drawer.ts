@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
@@ -30,36 +30,44 @@ const Julia = () => {
   let [yMax, setYMax] = useState(1.5);
   let [locked,  setLocked] = useState(false);
 
-  function Draw() {
+  let canvas: HTMLCanvasElement;
+  let ctx: CanvasRenderingContext2D;
+
+  useEffect (() => {
+    canvas = canvasRef.current!;
+    ctx = canvas.getContext('2d')!;
+    Draw(false);
+  }, [canvasSize, color, maxIterations, threshold, xMin, xMax, yMin, yMax]);
+
+  useEffect (() => {
+    canvas = canvasRef.current!;
+    ctx = canvas.getContext('2d')!;
+  }, [locked]);
+
+  function Draw(execute: boolean) {
     if (locked) return;
     setLocked(true);
-    let canvas = canvasRef.current;
-    if (canvas) {
-      let ctx = canvas.getContext('2d');
-      if (ctx) {
-        let xDelta = (xMax - xMin) / canvasSize;
-        let yDelta = (yMax - yMin) / canvasSize;
-        for (let x = 0; x < canvasSize; x++) {
-          for (let y = 0; y < canvasSize; y++) {
-            let z = {x: xMin + x * xDelta, y: yMin + y * yDelta};
-            let i = 0;
-            while (i < maxIterations) {
-              let z2 = {x: z.x * z.x - z.y * z.y, y: 2 * z.x * z.y};
-              z.x = z2.x + c.x;
-              z.y = z2.y + c.y;
-              if (z.x * z.x + z.y * z.y > threshold) {
-                break;
-              }
-              i++;
-            }
-            if (i == maxIterations) {
-              ctx.fillStyle = 'black';
-            } else {
-              ctx.fillStyle = `hsl(${color + i * 360 / maxIterations}, 100%, 50%)`;
-            }
-            ctx.fillRect(x, y, 1, 1);
+    let xDelta = (xMax - xMin) / canvasSize;
+    let yDelta = (yMax - yMin) / canvasSize;
+    for (let x = 0; x < canvasSize; x++) {
+      for (let y = 0; y < canvasSize; y++) {
+        let z = {x: xMin + x * xDelta, y: yMin + y * yDelta};
+        let i = 0;
+        while (i < maxIterations) {
+          let z2 = {x: z.x * z.x - z.y * z.y, y: 2 * z.x * z.y};
+          z.x = z2.x + c.x;
+          z.y = z2.y + c.y;
+          if (z.x * z.x + z.y * z.y > threshold) {
+            break;
           }
+          i++;
         }
+        if (i == maxIterations) {
+          ctx.fillStyle = 'black';
+        } else {
+          ctx.fillStyle = `hsl(${color + i * 360 / maxIterations}, 100%, 50%)`;
+        }
+        ctx.fillRect(x, y, 1, 1);
       }
     }
     setLocked(false);
@@ -72,7 +80,7 @@ const Julia = () => {
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
       </div>
       <div id='button-div'>
-        <Button variant="outline-primary" onClick={Draw}>Draw!!!</Button>
+        <Button variant="outline-primary" onClick={() => {Draw(true)}}>Draw!!!</Button>
       </div>
       <table id='Settings'>
         <tbody>
