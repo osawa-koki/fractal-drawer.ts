@@ -44,6 +44,7 @@ const Mandelbrot = () => {
   }, [locked]);
 
   function Draw(execute: boolean) {
+    if (execute === false) return;
     if (locked) return;
     setLocked(true);
     let xRange = xMax - xMin;

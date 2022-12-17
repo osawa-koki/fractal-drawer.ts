@@ -45,6 +45,7 @@ const Julia = () => {
   }, [locked]);
 
   function Draw(execute: boolean) {
+    if (execute === false) return;
     if (locked) return;
     setLocked(true);
     let xDelta = (xMax - xMin) / canvasSize;
