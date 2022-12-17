@@ -32,8 +32,8 @@ const features: Feature[] = [
     id: "burning-ship",
   },
   {
-    name: "バーンズリーのフェルン",
-    description: "バーンズリーのフェルンを描画します。",
+    name: "バーンズリーのシダ",
+    description: "バーンズリーのシダを描画します。",
     id: "barnsley-fern",
   },
   {
