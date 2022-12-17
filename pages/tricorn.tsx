@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Layout from '../components/Layout';
 import Settings from '../components/Settings';
 
-const pageName = 'Julia';
+const pageName = 'Tricorn';
 
 const canvasMinSize = 100;
 const canvasMaxSize = 500;
@@ -15,20 +15,19 @@ const thresholdMin = 3;
 const thresholdMax = 100;
 const axis_delta = 0.1;
 
-const Julia = () => {
+const Tricorn = () => {
 
   let canvasRef = useRef<HTMLCanvasElement>(null);
 
   let [canvasSize, setCanvasSize] = useState(300);
   let [color, setColor] = useState(0);
-  let [maxIterations, setMaxIterations] = useState(75);
+  let [maxIterations, setMaxIterations] = useState(20);
   let [threshold, setThreshold] = useState(10);
-  let [c, setC] = useState({x: -0.4, y: 0.6});
-  let [xMin, setXMin] = useState(-1.5);
-  let [xMax, setXMax] = useState(1.5);
-  let [yMin, setYMin] = useState(-1.5);
-  let [yMax, setYMax] = useState(1.5);
-  let [locked,  setLocked] = useState(false);
+  let [xMin, setXMin] = useState(-2.3);
+  let [xMax, setXMax] = useState(1.7);
+  let [yMin, setYMin] = useState(-2);
+  let [yMax, setYMax] = useState(2);
+  let [locked, setLocked] = useState(false);
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -48,25 +47,28 @@ const Julia = () => {
     if (execute === false) return;
     if (locked) return;
     setLocked(true);
-    let xDelta = (xMax - xMin) / canvasSize;
-    let yDelta = (yMax - yMin) / canvasSize;
+    let xRange = xMax - xMin;
+    let yRange = yMax - yMin;
+    let xStep = xRange / canvasSize;
+    let yStep = yRange / canvasSize;
     for (let x = 0; x < canvasSize; x++) {
       for (let y = 0; y < canvasSize; y++) {
-        let z = {x: xMin + x * xDelta, y: yMin + y * yDelta};
+        let x0 = xMin + x * xStep;
+        let y0 = yMin + y * yStep;
+        let x1 = 0;
+        let y1 = 0;
         let i = 0;
-        while (i < maxIterations) {
-          let z2 = {x: z.x * z.x - z.y * z.y, y: 2 * z.x * z.y};
-          z.x = z2.x + c.x;
-          z.y = z2.y + c.y;
-          if (z.x * z.x + z.y * z.y > threshold) {
-            break;
-          }
+        while (x1 * x1 + y1 * y1 < threshold && i < maxIterations) {
+          let x2 = x1 * x1 - y1 * y1 + x0;
+          let y2 = -(2 * x1 * y1 + y0);
+          x1 = x2;
+          y1 = y2;
           i++;
         }
-        if (i == maxIterations) {
+        if (i === maxIterations) {
           ctx.fillStyle = 'black';
         } else {
-          ctx.fillStyle = `hsl(${color + i * 360 / maxIterations}, 100%, 50%)`;
+          ctx.fillStyle = `hsla(${(i * 360 / maxIterations + color) % 360}, 100%, 50%, 1)`;
         }
         ctx.fillRect(x, y, 1, 1);
       }
@@ -75,7 +77,7 @@ const Julia = () => {
   }
 
   return (
-    <Layout title={`${pageName} (${Settings.ProjectName})`} favicon='feature-image/julia.png'>
+    <Layout title={`${pageName} (${Settings.ProjectName})`} favicon='feature-image/tricorn.png'>
       <div id='CanvasArea'>
         <h1>{pageName}</h1>
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
@@ -106,16 +108,6 @@ const Julia = () => {
             <td>{threshold}</td>
           </tr>
           <tr>
-            <th>C(x)</th>
-            <td><Form.Control type='number' step={axis_delta} value={c.x} onInput={(e) => {setC({x: parseFloat((e.target as HTMLInputElement).value), y: c.y})}} /></td>
-            <td>{c.x}</td>
-          </tr>
-          <tr>
-            <th>C(y)</th>
-            <td><Form.Control type='number' step={axis_delta} value={c.y} onInput={(e) => {setC({x: c.x, y: parseFloat((e.target as HTMLInputElement).value)})}} /></td>
-            <td>{c.y}</td>
-          </tr>
-          <tr>
             <th>X Min</th>
             <td><Form.Control type='number' step={axis_delta} value={xMin} onInput={(e) => {setXMin(parseFloat((e.target as HTMLInputElement).value))}} /></td>
             <td>{xMin}</td>
@@ -141,4 +133,4 @@ const Julia = () => {
   );
 };
 
-export default Julia;
+export default Tricorn;
