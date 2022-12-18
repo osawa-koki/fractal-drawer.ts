@@ -82,11 +82,6 @@ const features: Feature[] = [
     id: "hilbert-curve",
   },
   {
-    name: "ペアノ曲線",
-    description: "ペアノ曲線を描画します。",
-    id: "peano-curve",
-  },
-  {
     name: "ペアノゴスパー曲線",
     description: "ペアノゴスパー曲線を描画します。",
     id: "peano-gosper-curve",
