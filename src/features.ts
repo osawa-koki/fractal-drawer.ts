@@ -82,28 +82,28 @@ const features: Feature[] = [
     id: "hilbert-curve",
   },
   {
-    name: "ペアノゴスパー曲線",
-    description: "ペアノゴスパー曲線を描画します。",
+    name: "ゴスパー曲線",
+    description: "ゴスパー曲線を描画します。",
     id: "gosper-curve",
   },
   {
-    name: "ペアノゴスパー島曲線",
-    description: "ペアノゴスパー島曲線を描画します。",
+    name: "ゴスパー島曲線",
+    description: "ゴスパー島曲線を描画します。",
     id: "gosper-island-curve",
   },
   {
-    name: "ペアノゴスパー空間埋め曲線",
-    description: "ペアノゴスパー空間埋め曲線を描画します。",
+    name: "ゴスパー空間埋め曲線",
+    description: "ゴスパー空間埋め曲線を描画します。",
     id: "gosper-space-filling-curve",
   },
   {
-    name: "ペアノゴスパー矢印先曲線",
-    description: "ペアノゴスパー矢印先曲線を描画します。",
+    name: "ゴスパー矢印先曲線",
+    description: "ゴスパー矢印先曲線を描画します。",
     id: "gosper-arrowhead-curve",
   },
   {
-    name: "ペアノゴスパードラゴン曲線",
-    description: "ペアノゴスパードラゴン曲線を描画します。",
+    name: "ゴスパードラゴン曲線",
+    description: "ゴスパードラゴン曲線を描画します。",
     id: "gosper-dragon-curve",
   },
 ];
