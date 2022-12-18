@@ -93,7 +93,6 @@ const HilbertCurve = () => {
       curr_direction += angle;
     }
     await Hilbert(_depth, _angle);
-
     setLocked(false);
   }
 
