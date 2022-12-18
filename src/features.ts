@@ -84,27 +84,27 @@ const features: Feature[] = [
   {
     name: "ペアノゴスパー曲線",
     description: "ペアノゴスパー曲線を描画します。",
-    id: "peano-gosper-curve",
+    id: "gosper-curve",
   },
   {
     name: "ペアノゴスパー島曲線",
     description: "ペアノゴスパー島曲線を描画します。",
-    id: "peano-gosper-island-curve",
+    id: "gosper-island-curve",
   },
   {
     name: "ペアノゴスパー空間埋め曲線",
     description: "ペアノゴスパー空間埋め曲線を描画します。",
-    id: "peano-gosper-space-filling-curve",
+    id: "gosper-space-filling-curve",
   },
   {
     name: "ペアノゴスパー矢印先曲線",
     description: "ペアノゴスパー矢印先曲線を描画します。",
-    id: "peano-gosper-arrowhead-curve",
+    id: "gosper-arrowhead-curve",
   },
   {
     name: "ペアノゴスパードラゴン曲線",
     description: "ペアノゴスパードラゴン曲線を描画します。",
-    id: "peano-gosper-dragon-curve",
+    id: "gosper-dragon-curve",
   },
 ];
 
