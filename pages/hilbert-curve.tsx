@@ -54,7 +54,6 @@ const HilbertCurve = () => {
     setLocked(true);
     await new Promise(r => setTimeout(r, lock_affect_time));
     ctx.clearRect(0, 0, canvasSize, canvasSize);
-    ctx.fillStyle = "green";
     let curr_position: coord = {
       x: start_x / 100 * canvasSize,
       y: canvasSize - (start_y / 100 * canvasSize),
