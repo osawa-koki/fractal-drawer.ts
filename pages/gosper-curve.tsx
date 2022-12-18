@@ -7,7 +7,7 @@ import Layout from '../components/Layout';
 import Settings from '../components/Settings';
 import coord from '../src/coord';
 
-const pageName = 'Hilbert Curve';
+const pageName = 'Gosper Curve';
 
 const lock_affect_time = 100;
 
@@ -22,13 +22,13 @@ const stepMax = 30;
 const timespanMin = 0;
 const timespanMax = 1000;
 
-const HilbertCurve = () => {
+const GosperCurve = () => {
 
   let canvasRef = useRef<HTMLCanvasElement>(null);
 
   let [canvasSize, setCanvasSize] = useState(300);
-  let [maxIterations, setMaxIterations] = useState(5);
-  let [start_x, setStartX] = useState(100);
+  let [maxIterations, setMaxIterations] = useState(3);
+  let [start_x, setStartX] = useState(50);
   let [start_y, setStartY] = useState(100);
   let [step, setStep] = useState(5);
   let [timespan, setTimespan] = useState(100);
@@ -58,45 +58,39 @@ const HilbertCurve = () => {
       x: start_x / 100 * canvasSize,
       y: canvasSize - (start_y / 100 * canvasSize),
     };
-    let curr_direction: number = 90;
+    let curr_direction: number = 0;
     let _angle = 90;
     let _step = step / 100 * canvasSize;
     let _depth = maxIterations;
     ctx.beginPath();
     ctx.moveTo(curr_position.x, curr_position.y);
-    async function Hilbert(depth: number, angle: number) {
-      if (depth <= 0) return;
-      curr_direction += angle;
-      //await new Promise(r => setTimeout(r, timespan));
-      Hilbert(depth - 1, -angle);
-      curr_position.x += _step * Math.cos(curr_direction * Math.PI / 180);
-      curr_position.y += _step * Math.sin(curr_direction * Math.PI / 180);
-      ctx.lineTo(curr_position.x, curr_position.y);
-      ctx.stroke();
-      curr_direction -= angle;
-      //await new Promise(r => setTimeout(r, timespan));
-      Hilbert(depth - 1, angle);
-      curr_position.x += _step * Math.cos(curr_direction * Math.PI / 180);
-      curr_position.y += _step * Math.sin(curr_direction * Math.PI / 180);
-      ctx.lineTo(curr_position.x, curr_position.y);
-      ctx.stroke();
-      //await new Promise(r => setTimeout(r, timespan));
-      Hilbert(depth - 1, angle);
-      curr_direction -= angle;
-      curr_position.x += _step * Math.cos(curr_direction * Math.PI / 180);
-      curr_position.y += _step * Math.sin(curr_direction * Math.PI / 180);
-      ctx.lineTo(curr_position.x, curr_position.y);
-      ctx.stroke();
-      //await new Promise(r => setTimeout(r, timespan));
-      Hilbert(depth - 1, -angle);
-      curr_direction += angle;
+    async function Gosper(depth: number, angle: number, is_A: boolean = true) {
+      if (depth === 0) {
+        curr_position.x += _step * Math.cos(curr_direction * Math.PI / 180);
+        curr_position.y += _step * Math.sin(curr_direction * Math.PI / 180);
+        // await new Promise(r => setTimeout(r, timespan));
+        ctx.lineTo(curr_position.x, curr_position.y);
+        ctx.stroke();
+        return;
+      }
+      const op_map = {
+        ['A']: (o: number, size: number) => {Gosper(o, size, true)},
+        ['B']: (o: number, size: number) => {Gosper(o, size, false)},
+        ['-']: (_a: number, _b: number) => {curr_direction += 60},
+        ['+']: (_a: number, _b: number) => {curr_direction -= 60},
+      };
+      (is_A ? 'A-B--B+A++AA+B-' : '+A-BB--B-A++A+B').split('').forEach(async curr_op => {
+        const curr_op_func = op_map[curr_op];
+        await curr_op_func(depth - 1, _step);
+        return;
+      });
     }
-    await Hilbert(_depth, _angle);
+    await Gosper(_depth, _angle);
     setLocked(false);
   }
 
   return (
-    <Layout title={`${pageName} (${Settings.ProjectName})`} favicon='feature-image/hilbert-curve.png'>
+    <Layout title={`${pageName} (${Settings.ProjectName})`} favicon='feature-image/gosper-curve.png'>
       <div id='CanvasArea'>
         <h1>{pageName}</h1>
         <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
@@ -148,4 +142,4 @@ const HilbertCurve = () => {
   );
 };
 
-export default HilbertCurve;
+export default GosperCurve;
