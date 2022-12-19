@@ -86,26 +86,6 @@ const features: Feature[] = [
     description: "ゴスパー曲線を描画します。",
     id: "gosper-curve",
   },
-  {
-    name: "ゴスパー島曲線",
-    description: "ゴスパー島曲線を描画します。",
-    id: "gosper-island-curve",
-  },
-  {
-    name: "ゴスパー空間埋め曲線",
-    description: "ゴスパー空間埋め曲線を描画します。",
-    id: "gosper-space-filling-curve",
-  },
-  {
-    name: "ゴスパー矢印先曲線",
-    description: "ゴスパー矢印先曲線を描画します。",
-    id: "gosper-arrowhead-curve",
-  },
-  {
-    name: "ゴスパードラゴン曲線",
-    description: "ゴスパードラゴン曲線を描画します。",
-    id: "gosper-dragon-curve",
-  },
 ];
 
 export default features;
