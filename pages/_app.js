@@ -1,9 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import '../components/Layout.scss';
-import '../pages/global.scss';
+import '../styles/Layout.scss';
+import '../styles/global.scss';
 
-import '../pages/index.scss';
+import '../styles/index.scss';
 
 export default function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />

@@ -13,7 +13,7 @@ type Props = {
 
 function Layout({ children, title = 'Fractal Drawer', favicon = 'favicon.ico' }: Props) {
   return (
-    <div id='Root'>
+    <div>
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
@@ -30,8 +30,11 @@ function Layout({ children, title = 'Fractal Drawer', favicon = 'favicon.ico' }:
           }
         </nav>
       </header>
-        {children}
+      <div id='Root'>
+          <main>{children}</main>
+      </div>
       <footer>
+        🥺🥺🥺&nbsp;{Settings.ProjectName}({Settings.Version})&nbsp;<a href='https://github.com/osawa-koki' target='_blank'>@osawa-koki</a>&nbsp;🥺🥺🥺
       </footer>
     </div>
   );
