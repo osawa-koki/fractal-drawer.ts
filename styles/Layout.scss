@@ -1,21 +1,54 @@
 
-#Root {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  header {
-    margin-top: 1rem;
-    nav {
-      .feature-link {
-        margin-right: 0.5rem;
-        padding-right: 0.5rem;
-        border-right: 1px solid lightgray;
-        color: rgb(0, 90, 255);
-        text-decoration: none;
-        &:hover {
-          text-decoration: underline;
-        }
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Consolas', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header {
+  max-width: 1500px;
+  margin-right: auto;
+  margin-left: auto;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100px;
+  background-color: rgba(white, 0.99);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  nav {
+    position: absolute;
+    inset: 0;
+    padding: 1rem;
+    margin: auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    .feature-link {
+      margin-right: 0.5rem;
+      padding-right: 0.5rem;
+      border-right: 1px solid lightgray;
+      color: rgb(0, 90, 255);
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
       }
     }
   }
+}
+
+#Root {
+  max-width: 1200px;
+  margin: 150px auto;
+  padding: 0 1rem;
+}
+
+footer {
+  background-color: lightgray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
 }
