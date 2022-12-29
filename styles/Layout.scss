@@ -26,6 +26,7 @@ header {
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
+    overflow-y: auto;
     .feature-link {
       margin-right: 0.5rem;
       padding-right: 0.5rem;
