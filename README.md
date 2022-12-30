@@ -28,7 +28,6 @@ yarn build
 - .next (Nextが使用するファイル群)
 - components (部品系)
 - node_modules (ノードモジュール)
-- docs (ビルド後ファイル群出力先 | デプロイ対象)
 - pages (ページ)
 - public (公開ページ)
 - src (その他プログラムに必要なコード)
@@ -39,4 +38,4 @@ yarn build
 | module | version |
 | ---- | ---- |
 | Windows | 11 Home |
-| Node | 16.18.0 |
+| Node | v19.3.0 |
