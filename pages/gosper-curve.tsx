@@ -16,7 +16,7 @@ const canvasMaxSize = 500;
 const maxIterationMinCount = 3;
 const maxIterationMaxCount = 10;
 const startYMin = 0;
-const startYMax = 100;
+const startYMax = 150;
 const stepMin = 1;
 const stepMax = 30;
 const timespanMin = 0;
@@ -27,10 +27,10 @@ const GosperCurve = () => {
   let canvasRef = useRef<HTMLCanvasElement>(null);
 
   let [canvasSize, setCanvasSize] = useState(300);
-  let [maxIterations, setMaxIterations] = useState(3);
+  let [maxIterations, setMaxIterations] = useState(4);
   let [start_x, setStartX] = useState(50);
-  let [start_y, setStartY] = useState(100);
-  let [step, setStep] = useState(5);
+  let [start_y, setStartY] = useState(130);
+  let [step, setStep] = useState(6);
   let [timespan, setTimespan] = useState(100);
   let [locked, setLocked] = useState(false);
 
